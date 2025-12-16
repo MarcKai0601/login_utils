@@ -9,8 +9,8 @@
     </select>
 
     <insert id="insert">
-        INSERT INTO user (username, password, email)
-        VALUES (#{username}, #{password}, #{email})
+        INSERT INTO user (Username, Password, Status)
+        VALUES (#{username}, #{password}, #{status})
     </insert>
 
 </mapper>

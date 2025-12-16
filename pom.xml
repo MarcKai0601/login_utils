@@ -14,6 +14,9 @@
     <packaging>pom</packaging>
     <name>login_utils_master</name>
     <description>login_utils_master</description>
+    <modules>
+        <module>login-utils-common</module>
+    </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

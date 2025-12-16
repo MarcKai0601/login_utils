@@ -1,32 +1,33 @@
 package org.loginutils.mgr;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.loginutils.dal.config.DalConfig;
-import org.loginutils.dal.entity.UserEntity;
-import org.loginutils.dal.repository.jpa.UserJpaRepository;
+import org.loginutils.dal.mappers.UserMapper;
+import org.loginutils.dal.model.User;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Optional;
-
+//@SpringBootTest(classes = DalConfig.class)
 @SpringBootTest
 public class UserRepositoryTest {
 
     @Autowired
-    private UserJpaRepository userJpaRepository;
+    private UserMapper userMapper;
 
     @Test
-    void testCreateUser() {
-        UserEntity user = new UserEntity();
-        user.setUsername("jack");
+    public void testCreateUser() {
+        User user = new User();
+        user.setUsername("test02");
         user.setPassword("pass123");
-        userJpaRepository.save(user);
+        user.setStatus(1);
+        userMapper.insert(user);
+        System.out.println("OK");
     }
 
-//    @Test
-//    void testFindByUsername() {
-//        UserEntity user = userJpaRepository.findByUsername("jack");
-//        Assertions.assertTrue(user.isPresent());
-//    }
+    @Test
+    void testFindByUsername() {
+        User user = userMapper.findList("kai");
+        System.out.println(user.getUsername());
+    }
 }
