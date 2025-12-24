@@ -2,7 +2,7 @@ package org.loginutils.mgr.controller.user;
 
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.loginutils.dal.model.User;
+import org.loginutils.dal.model.UserDo;
 import org.loginutils.dal.mappers.UserMapper;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +18,7 @@ public class UserController {
     UserMapper userMapper;
 
     @PostMapping("/login")
-    public String Login(@RequestBody User user) {
+    public String Login(@RequestBody UserDo user) {
 
         log.info(user.toString());
         if (user.getUsername() != null) {
@@ -26,4 +26,23 @@ public class UserController {
         }
         return "Fail";
     }
+
+    @PostMapping("/add")
+    public String add(@RequestBody UserDo user) {
+
+        log.info(user.toString());
+        if (user.getUsername() != null) {
+            return  userMapper.findList(user.getUsername()).toString();
+        }
+        return "Fail";
+    }
+
+//    public static void main(String[] args) {
+//        boolean a ="OK".equals(HttpStatus.OK.getReasonPhrase());
+//        System.out.println(a);
+//        System.out.println(HttpStatus.OK);
+//        System.out.println(HttpStatus.OK.getReasonPhrase());
+//        System.out.println(HttpStatus.OK.getClass());
+//        System.out.println(HttpStatus.OK);
+//    }
 }

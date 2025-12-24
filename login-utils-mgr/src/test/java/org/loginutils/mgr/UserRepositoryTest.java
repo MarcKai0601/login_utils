@@ -1,10 +1,8 @@
 package org.loginutils.mgr;
 
 import org.junit.jupiter.api.Test;
-import org.loginutils.dal.config.DalConfig;
 import org.loginutils.dal.mappers.UserMapper;
-import org.loginutils.dal.model.User;
-import org.mybatis.spring.annotation.MapperScan;
+import org.loginutils.dal.model.UserDo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -17,7 +15,7 @@ public class UserRepositoryTest {
 
     @Test
     public void testCreateUser() {
-        User user = new User();
+        UserDo user = new UserDo();
         user.setUsername("test02");
         user.setPassword("pass123");
         user.setStatus(1);
@@ -27,7 +25,7 @@ public class UserRepositoryTest {
 
     @Test
     void testFindByUsername() {
-        User user = userMapper.findList("kai");
+        UserDo user = userMapper.findList("kai");
         System.out.println(user.getUsername());
     }
 }
