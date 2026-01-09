@@ -7,7 +7,7 @@
 ## 專案整體結構
 
 ```text
-login-utils-parent
+login-utils-master
 ├─ login-utils-common                     # 僅放跨服務共用的「契約」
 │  └─ src/main/java/org/loginutils/common
 │     ├─ dto                              # ClientDTO / SessionDTO / 通用回傳格式
