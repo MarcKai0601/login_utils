@@ -16,7 +16,7 @@ class AddUserRequest {
     @NotBlank
     private String username;
 
-    @Size(min = UserUtil.DEFAULT_PASSWORD_LENGTH)
+    @Size(min = UserDto.DEFAULT_PASSWORD_LENGTH)
     private String password;
 
     @Max(UserDto.STATUS_ENABLED)
