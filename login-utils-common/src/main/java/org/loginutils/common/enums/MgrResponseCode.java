@@ -1,4 +1,4 @@
-package org.loginutils.enums;
+package org.loginutils.common.enums;
 
 public enum MgrResponseCode {
     // 成功

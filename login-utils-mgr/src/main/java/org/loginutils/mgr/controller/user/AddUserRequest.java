@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.loginutils.dto.UserDto;
+import org.loginutils.common.dto.UserDto;
 
 
 @Data

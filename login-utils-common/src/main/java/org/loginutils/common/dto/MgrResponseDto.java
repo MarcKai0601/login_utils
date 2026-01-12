@@ -1,6 +1,6 @@
-package org.loginutils.dto;
+package org.loginutils.common.dto;
 
-import org.loginutils.enums.MgrResponseCode;
+import org.loginutils.common.enums.MgrResponseCode;
 
 public class MgrResponseDto<T> {
     public static <T> MgrResponseDto<T> success(T data) {

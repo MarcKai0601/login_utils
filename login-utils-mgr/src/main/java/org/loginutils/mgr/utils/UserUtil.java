@@ -1,11 +1,11 @@
 package org.loginutils.mgr.utils;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.loginutils.dto.RoleDto;
-import org.loginutils.dto.SessionDto;
-import org.loginutils.dto.UserDto;
+import org.loginutils.common.dto.RoleDto;
+import org.loginutils.common.dto.SessionDto;
+import org.loginutils.common.dto.UserDto;
 
-import static org.loginutils.dto.UserDto.DEFAULT_PASSWORD_LENGTH;
+import static org.loginutils.common.dto.UserDto.DEFAULT_PASSWORD_LENGTH;
 
 public final class UserUtil {
 

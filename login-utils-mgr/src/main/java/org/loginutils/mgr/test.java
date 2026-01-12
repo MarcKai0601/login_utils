@@ -1,5 +1,8 @@
+package org.loginutils.mgr;
+
 import java.util.LinkedList;
 import java.util.List;
+
 
 public class test {
 
@@ -41,17 +44,17 @@ public class test {
         return finish;
     }
 
-    public static void main(String[] args) {
-
-        long start = System.nanoTime();
-
-        String[] word = {"bella", "label", "roller"};
-
-        long end = System.nanoTime();
-
-        System.out.println(commonChars(word));
-        System.out.println("執行時間：" + (end - start) / 1_000_000.0 + " ms");
-
-    }
+//    public static void main(String[] args) {
+//
+//        long start = System.nanoTime();
+//
+//        String[] word = {"bella", "label", "roller"};
+//
+//        long end = System.nanoTime();
+//
+//        System.out.println(commonChars(word));
+//        System.out.println("執行時間：" + (end - start) / 1_000_000.0 + " ms");
+//
+//    }
 
 }

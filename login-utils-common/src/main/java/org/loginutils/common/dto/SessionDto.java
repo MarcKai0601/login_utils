@@ -1,4 +1,4 @@
-package org.loginutils.dto;
+package org.loginutils.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

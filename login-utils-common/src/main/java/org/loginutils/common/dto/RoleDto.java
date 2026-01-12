@@ -1,14 +1,10 @@
-package org.loginutils.dto;
+package org.loginutils.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class RoleDto {
 
     public static final int STATUS_DISABLED = 0;

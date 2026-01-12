@@ -108,3 +108,69 @@ login-utils-master
 - Domain Model 一律留在所屬服務內，不共用、不外流
 
 ---
+
+## 📅 Roadmap & TODO List
+
+本專案採用 **MVP -> 優化 -> 成品 -> Library** 的迭代開發模式。目前的開發重點在於建立核心骨架並跑通基礎流程。
+
+### Phase 1: MVP (Minimum Viable Product) - 基礎骨架與註冊
+目標：完成從 Request 到 DB 的完整寫入流程，驗證分層架構的可行性。
+
+- [ ] **Database & DAL 層實作**
+    - [ ] 設計 `sys_user` 資料表 Schema (SQL)
+    - [ ] 建立 `SysUserDO` (對應 DB 欄位)
+    - [ ] 建立 `SysUserMapper` (MyBatis Interface & XML)
+- [ ] **Common 層契約定義**
+    - [ ] 定義 `AccountStatus` Enum (ACTIVE, LOCKED, etc.)
+    - [ ] 定義基礎錯誤碼 `ErrorCode` Enum
+- [ ] **Manager 層業務邏輯 (User Registration)**
+    - [ ] 建立 `UserCreateRequest` (API 入參)
+    - [ ] 建立 `UserResponse` (API 回傳)
+    - [ ] 實作 `SysUserService` (包含 `checkUserExist` 與 `saveUser` 邏輯)
+    - [ ] 實作 `UserController` (提供 `/api/v1/users` 註冊接口)
+- [ ] **基礎配置**
+    - [ ] Spring Boot `application.yml` (DB連線、MyBatis設定)
+
+### Phase 2: Optimization - 安全性與規範化
+目標：在功能可用的基礎上，加入必要的安全性保護與程式碼規範，使其接近生產環境標準。
+
+- [ ] **安全性強化**
+    - [ ] 引入 Spring Security (基礎配置)
+    - [ ] 實作密碼加密 (BCryptPasswordEncoder)
+- [ ] **例外處理與驗證**
+    - [ ] 實作全域例外處理 (`GlobalExceptionHandler`)
+    - [ ] 統一 API 回傳格式 (Result / ResponseWrapper)
+    - [ ] 加入 JSR-303 參數檢核 (`@NotBlank`, `@Email`)
+- [ ] **工具類封裝**
+    - [ ] 實作 `BeanCopyUtils` 或引入 MapStruct (優化 DTO/DO 轉換)
+
+### Phase 3: Product Features - 登入與狀態管理
+目標：完成使用者系統的核心功能閉環。
+
+- [ ] **登入認證功能**
+    - [ ] 定義 `UserLoginRequest`
+    - [ ] 實作登入邏輯 (驗證帳號密碼)
+    - [ ] 實作 Session 或 Token (JWT) 發放機制
+    - [ ] 定義 `ClientDTO` / `SessionDTO` (供跨服務使用)
+- [ ] **使用者管理功能**
+    - [ ] 查詢使用者資訊 API (`/me`)
+    - [ ] 修改密碼 / 重置密碼流程
+    - [ ] 帳號狀態變更 (鎖定/解鎖)
+
+### Phase 4: Transformation - 轉型為 Library (Starter)
+目標：將微服務架構轉型為可被引用的 Maven Dependency。
+
+- [ ] **架構重構**
+    - [ ] 移除 `login-utils-mgr` 的 `main` 方法
+    - [ ] 重新命名模組為 `login-utils-spring-boot-starter`
+- [ ] **自動化配置 (AutoConfiguration)**
+    - [ ] 建立 `LoginUtilsProperties` (支援 `application.yml` 配置)
+    - [ ] 實作 `AutoConfiguration` 類別 (自動掃描 Mapper 與 Service)
+    - [ ] 設定 `spring.factories` 或 `imports` 文件
+- [ ] **資料庫自動化**
+    - [ ] 引入 Flyway 或 Liquibase
+    - [ ] 將 SQL 腳本打包至 Jar 中，實現啟動時自動建表
+- [ ] **發布與整合測試**
+    - [ ] 建立範例專案 (Example App) 引用此 Library 進行測試
+
+---

@@ -1,4 +1,4 @@
-package org.loginutils.dto;
+package org.loginutils.common.dto;
 
 public class UserDto {
     public static final String PATH_SEPARATOR = "/";
