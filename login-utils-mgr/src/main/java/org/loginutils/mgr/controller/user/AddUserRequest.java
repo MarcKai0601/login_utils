@@ -1,4 +1,4 @@
-package org.loginutils.common.mgr.controller.user;
+package org.loginutils.mgr.controller.user;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

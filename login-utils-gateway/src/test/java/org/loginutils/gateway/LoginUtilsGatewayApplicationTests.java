@@ -1,4 +1,4 @@
-package org.loginutils.common.gateway;
+package org.loginutils.gateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

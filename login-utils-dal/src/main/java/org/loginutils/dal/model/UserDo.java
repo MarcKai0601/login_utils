@@ -1,4 +1,4 @@
-package org.loginutils.common.dal.model;
+package org.loginutils.dal.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
