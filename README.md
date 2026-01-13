@@ -15,7 +15,7 @@ login-utils-master
 │     └─ util                             # 純工具類（不可依賴任何特定服務）
 │
 ├─ login-utils-mgr                        # 對外 API（後台 / 管理端）服務
-│  └─ src/main/java/org/loginutils/mgr
+│  └─ src/main/java/org/loginutils/common/mgr
 │     ├─ web
 │     │  ├─ controller                   # RestController（僅負責請求轉發）
 │     │  ├─ xxx                          # 只屬於 mgr 的 API Request DTO or Response / VO (依據Table名稱命名 建立相關的服務)
@@ -25,7 +25,7 @@ login-utils-master
 │     └─ exception                        # 自訂例外與全域例外處理
 │
 └─ login-utils-dal                        # DB 存取模組（可被多服務共用）
-   └─ src/main/java/org/loginutils/dal
+   └─ src/main/java/org/loginutils/common/dal
       ├─ modle                           # DB Table 對應的 Entity / DO
       └─ mapper                           # MyBatis Mapper（DAO）
 ```
