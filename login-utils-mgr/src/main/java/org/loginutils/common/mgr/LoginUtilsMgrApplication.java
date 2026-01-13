@@ -1,4 +1,4 @@
-package org.loginutils.mgr;
+package org.loginutils.common.mgr;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

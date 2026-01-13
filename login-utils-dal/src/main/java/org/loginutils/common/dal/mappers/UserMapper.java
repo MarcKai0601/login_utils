@@ -1,7 +1,7 @@
-package org.loginutils.dal.mappers;
+package org.loginutils.common.dal.mappers;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.loginutils.dal.model.UserDo;
+import org.loginutils.common.dal.model.UserDo;
 
 @Mapper
 public interface UserMapper {

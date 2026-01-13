@@ -1,8 +1,8 @@
-package org.loginutils.mgr;
+package org.loginutils.common.mgr;
 
 import org.junit.jupiter.api.Test;
-import org.loginutils.dal.mappers.UserMapper;
-import org.loginutils.dal.model.UserDo;
+import org.loginutils.common.dal.mappers.UserMapper;
+import org.loginutils.common.dal.model.UserDo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

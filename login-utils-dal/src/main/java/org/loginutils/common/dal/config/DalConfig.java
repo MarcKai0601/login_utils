@@ -1,4 +1,4 @@
-package org.loginutils.dal.config;
+package org.loginutils.common.dal.config;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;

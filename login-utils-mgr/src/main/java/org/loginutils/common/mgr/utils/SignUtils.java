@@ -1,4 +1,4 @@
-package org.loginutils.mgr.utils;
+package org.loginutils.common.mgr.utils;
 
 
 import java.security.MessageDigest;

@@ -1,4 +1,4 @@
-package org.loginutils.mgr;
+package org.loginutils.common.mgr;
 
 import java.util.LinkedList;
 import java.util.List;
