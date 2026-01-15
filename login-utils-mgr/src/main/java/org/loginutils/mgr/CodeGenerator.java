@@ -3,6 +3,7 @@ package org.loginutils.mgr;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.baomidou.mybatisplus.generator.config.TemplateType; // 記得加這個 import
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,21 +48,36 @@ public class CodeGenerator {
                             .outputDir(dalModulePath + "/src/main/java");
                 })
                 .packageConfig(builder -> {
-                    builder.parent("org.loginutils.common.dal")
+                    builder.parent("org.loginutils.dal")
                             .entity("model")
                             .service("service")
                             .serviceImpl("service.impl")
                             .mapper("mappers")
                             .xml("mappers.xml")
-                            .pathInfo(Collections.singletonMap(OutputFile.xml, dalModulePath + "/src/main/resources/mappers"));
+                            .pathInfo(Collections.singletonMap(OutputFile.xml, dalModulePath + "/src/main/resources/org/loginutils/dal/mappers"));
                 })
                 .strategyConfig(builder -> {
-                    builder.addInclude("sys_user") // 設定你的表名
+                    builder.addInclude("role") // 設定你的表名
                             .entityBuilder()
                             .enableLombok()
                             .enableTableFieldAnnotation()
-                            .controllerBuilder()
-                            .enableRestStyle();
+                            // ▼ 重點在這裡：設定檔名格式 ▼
+                            // %s 會被替換成表名 (例如 Role)，後面加上 Do
+                            .formatFileName("%sDo")
+                            // ▼ 新增這段 Mapper 的配置 ▼
+                            .mapperBuilder()
+                            .enableBaseResultMap()  // 生成 <resultMap>
+                            .enableBaseColumnList(); // 生成 <sql id="Base_Column_List">
+//                            .controllerBuilder()
+//                            .enableRestStyle()
+                    ;
+                })
+                // ✅ 新增這一段：禁用 Controller 模板
+                .templateConfig(builder -> {
+                    builder.disable(TemplateType.CONTROLLER, TemplateType.SERVICE, TemplateType.SERVICE_IMPL);
+
+                    // 💡 如果你連 Service 也不想要 (只想留純粹的 DAL 層)，可以寫成：
+                    // builder.disable(TemplateType.CONTROLLER, TemplateType.SERVICE, TemplateType.SERVICE_IMPL);
                 })
                 .templateEngine(new FreemarkerTemplateEngine())
                 .execute();
