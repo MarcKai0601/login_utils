@@ -11,24 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/mgr")
+@RequestMapping("/api/mgr/user")
 public class UserController {
 
     @Resource
     UserMapper userMapper;
 
-    @PostMapping("/login")
-    public String Login(@RequestBody UserDo user) {
-
-        log.info(user.toString());
-        if (user.getUsername() != null) {
-            return  userMapper.findList(user.getUsername()).toString();
-        }
-        return "Fail";
-    }
-
     @PostMapping("/add")
-    public String add(@RequestBody UserDo user) {
+    public String addUser(@RequestBody AddUserRequest addUserRequest) {
 
         log.info(user.toString());
         if (user.getUsername() != null) {
