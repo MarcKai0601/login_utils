@@ -4,12 +4,12 @@
 
     <select id="findList" resultType="org.loginutils.dal.model.UserDo">
         SELECT *
-        FROM user
+        FROM k_user
         WHERE Username = #{username}
     </select>
 
     <insert id="insert">
-        INSERT INTO user (Username, Password, Status)
+        INSERT INTO k_user (Username, Password, Status)
         VALUES (#{username}, #{password}, #{status})
     </insert>
 

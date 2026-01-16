@@ -1,5 +1,5 @@
 -- auto-generated definition
-create table user
+create table k_user
 (
     UserId   bigint unsigned auto_increment comment '帳戶ID'
         primary key,
