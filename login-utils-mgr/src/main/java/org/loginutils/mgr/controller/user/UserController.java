@@ -2,6 +2,7 @@ package org.loginutils.mgr.controller.user;
 
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.loginutils.common.dto.MgrResponseDto;
 import org.loginutils.dal.model.UserDo;
 import org.loginutils.dal.mappers.UserMapper;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,13 +19,20 @@ public class UserController {
     UserMapper userMapper;
 
     @PostMapping("/add")
-    public String addUser(@RequestBody AddUserRequest addUserRequest) {
+    public MgrResponseDto addUser(@RequestBody AddUserRequest addUserRequest) {
 
-        log.info(user.toString());
-        if (user.getUsername() != null) {
-            return  userMapper.findList(user.getUsername()).toString();
-        }
-        return "Fail";
+        UserDo user = UserDo.builder()
+                .username(addUserRequest.getUsername())
+                .password(addUserRequest.getPassword())
+                .status(addUserRequest.getStatus())
+                .build();
+
+        log.info(addUserRequest.toString());
+
+        userMapper.insert(user);
+        return MgrResponseDto.success("");
+
+
     }
 
 //    public static void main(String[] args) {

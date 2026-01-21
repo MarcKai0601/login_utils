@@ -9,8 +9,8 @@
     </select>
 
     <insert id="insert">
-        INSERT INTO k_user (Username, Password, Status)
-        VALUES (#{username}, #{password}, #{status})
+        INSERT INTO k_user (Username, Password, Status, CreateTime, UpdateTime)
+        VALUES (#{username}, #{password}, #{status}, NOW(), NOW())
     </insert>
 
 </mapper>
