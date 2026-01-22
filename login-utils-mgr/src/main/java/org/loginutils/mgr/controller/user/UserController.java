@@ -1,24 +1,26 @@
 package org.loginutils.mgr.controller.user;
 
-import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.loginutils.common.dto.MgrResponseDto;
 import org.loginutils.dal.model.UserDo;
 import org.loginutils.dal.mappers.UserMapper;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.loginutils.mgr.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/mgr/user")
 public class UserController {
 
-    @Resource
+    @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    UserService userService;
+
     @PostMapping("/add")
+    @ResponseBody
     public MgrResponseDto addUser(@RequestBody AddUserRequest addUserRequest) {
 
         UserDo user = UserDo.builder()
@@ -29,8 +31,9 @@ public class UserController {
 
         log.info(addUserRequest.toString());
 
-        userMapper.insert(user);
-        return MgrResponseDto.success("");
+        userService.addUser(user);
+
+        return MgrResponseDto.success("SUCCESS");
 
 
     }
