@@ -2,9 +2,7 @@ package org.loginutils.mgr.service;
 
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.loginutils.common.enums.MgrResponseCode;
 import org.loginutils.dal.mappers.UserMapper;
-import org.loginutils.dal.model.UserDo;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -71,7 +69,7 @@ public class LoginService {
 //        return user;
 //    }
 
-    public String login(UserDo user){
+    public String login(){
         return userMapper.findList(user.getUsername()).toString();
     }
 }

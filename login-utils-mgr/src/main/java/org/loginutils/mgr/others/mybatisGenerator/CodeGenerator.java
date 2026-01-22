@@ -1,4 +1,4 @@
-package org.loginutils.mgr; // 注意：確認你的 package 是否正確
+package org.loginutils.mgr.others.mybatisGenerator; // 注意：確認你的 package 是否正確
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;

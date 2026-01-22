@@ -1,7 +1,7 @@
 package org.loginutils.mgr.controller.user;
 
 import lombok.extern.slf4j.Slf4j;
-import org.loginutils.common.dto.MgrResponseDto;
+import org.loginutils.common.dto.repsonse.MgrResponseDto;
 import org.loginutils.dal.model.UserDo;
 import org.loginutils.dal.mappers.UserMapper;
 import org.loginutils.mgr.service.UserService;

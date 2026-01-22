@@ -17,6 +17,8 @@ public class UserDo {
 
     private String username;
 
+    private String email;
+
     private String password;
 
     private Integer status;

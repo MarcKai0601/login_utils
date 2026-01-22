@@ -18,11 +18,11 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/login")
-    public String Login(@RequestBody UserDo user) {
+    public String Login(@RequestBody LoginRequest loginRequest) {
 
-        log.info(user.toString());
-        if (user.getUsername() != null) {
-            return  loginService.login(user);
+        log.info(loginRequest.toString());
+        if (loginRequest.getUsername() != null) {
+            return  loginService.login();
         }
         return "Fail";
     }

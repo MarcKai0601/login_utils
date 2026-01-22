@@ -1,4 +1,4 @@
-package org.loginutils.common.dto;
+package org.loginutils.common.dto.repsonse;
 
 import org.loginutils.common.enums.MgrResponseCode;
 

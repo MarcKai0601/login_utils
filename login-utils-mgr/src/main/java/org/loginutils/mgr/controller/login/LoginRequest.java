@@ -1,4 +1,4 @@
-package org.loginutils.mgr.controller.user;
+package org.loginutils.mgr.controller.login;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -7,17 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.loginutils.common.dto.UserDto;
 
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddUserRequest {
+public class LoginRequest {
+
     @NotBlank
     private String username;
 
     @NotBlank
-    @Size(min = UserDto.DEFAULT_PASSWORD_LENGTH)
     private String password;
 
     @Max(UserDto.STATUS_ENABLED)
@@ -34,4 +33,5 @@ public class AddUserRequest {
     private String email;
 
     private String phone;
+
 }

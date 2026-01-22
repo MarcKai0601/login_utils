@@ -85,7 +85,7 @@ login-utils-master
 | Mapper | dal/mapper | MyBatis Mapper |
 | Request | mgr/web/request | 對外 API 請求 |
 | Response | mgr/web/response | 對外 API 回傳 |
-| ClientDTO | common/dto | 跨服務契約 |
+| DTO | common/dto | 跨服務 / 跨層 (Controller ⟷ Service) |
 | Enum | common/enums | 跨服務共用語意 |
 | Domain Model | mgr/domain | 業務語意、權限判斷、狀態行為（非 DB、非 API） |
 
