@@ -7,13 +7,14 @@ import org.loginutils.common.dto.repsonse.MgrResponseDto;
 import org.loginutils.common.utils.hash.MD5Utils;
 import org.loginutils.dal.mappers.UserMapper;
 import org.loginutils.dal.model.UserDo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 public class LoginService {
 
-    @Resource
+    @Autowired
     UserMapper userMapper;
 
 //    public UserLogin login(String username, String password, String totpCode, String ip, String merchant) throws XxPayMgrException {
@@ -86,7 +87,7 @@ public class LoginService {
                 .password(userDto.getPassword())
                 .build();
 
-        userDo = userMapper.findByLogin(userDo);
+        userDo = userMapper.findList(userDo);
 
         UserDto userDtoRepson = UserDto.builder()
                 .userId(userDo.getUserId())
