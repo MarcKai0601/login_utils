@@ -1,6 +1,7 @@
 package org.loginutils.mgr.controller.user;
 
 import lombok.extern.slf4j.Slf4j;
+import org.loginutils.common.dto.UserDto;
 import org.loginutils.common.dto.repsonse.MgrResponseDto;
 import org.loginutils.dal.model.UserDo;
 import org.loginutils.dal.mappers.UserMapper;
@@ -23,7 +24,7 @@ public class UserController {
     @ResponseBody
     public MgrResponseDto addUser(@RequestBody AddUserRequest addUserRequest) {
 
-        UserDo user = UserDo.builder()
+        UserDto userDto = UserDto.builder()
                 .username(addUserRequest.getUsername())
                 .password(addUserRequest.getPassword())
                 .status(addUserRequest.getStatus())
@@ -31,7 +32,7 @@ public class UserController {
 
         log.info(addUserRequest.toString());
 
-        userService.addUser(user);
+        userService.addUser(userDto);
 
         return MgrResponseDto.success("SUCCESS");
 

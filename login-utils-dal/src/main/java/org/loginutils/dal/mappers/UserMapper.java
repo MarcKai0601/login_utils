@@ -8,5 +8,7 @@ public interface UserMapper {
 
     UserDo findList(String username);
 
+    UserDo findByLogin(UserDo user);
+
     void insert(UserDo user);
 }

@@ -2,14 +2,20 @@ package org.loginutils.mgr.service;
 
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.loginutils.common.dto.UserDto;
+import org.loginutils.common.dto.repsonse.MgrResponseDto;
+import org.loginutils.common.utils.hash.MD5Utils;
 import org.loginutils.dal.mappers.UserMapper;
+import org.loginutils.dal.model.UserDo;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 public class LoginService {
+
     @Resource
     UserMapper userMapper;
+
 //    public UserLogin login(String username, String password, String totpCode, String ip, String merchant) throws XxPayMgrException {
 //        log.info("username : "+username);
 //        UserLogin user = userMapper.findLogin(username, merchant);
@@ -69,7 +75,25 @@ public class LoginService {
 //        return user;
 //    }
 
-    public String login(){
-        return userMapper.findList(user.getUsername()).toString();
+    public UserDto login(UserDto userDto){
+
+        String password = userDto.getPassword();
+        userDto.setPassword(MD5Utils.getMD5String(password));
+
+
+        UserDo userDo = UserDo.builder()
+                .username(userDto.getUsername())
+                .password(userDto.getPassword())
+                .build();
+
+        userDo = userMapper.findByLogin(userDo);
+
+        UserDto userDtoRepson = UserDto.builder()
+                .userId(userDo.getUserId())
+                .username(userDto.getUsername())
+                .status(userDo.getStatus())
+                .build();
+
+        return userDtoRepson;
     }
 }

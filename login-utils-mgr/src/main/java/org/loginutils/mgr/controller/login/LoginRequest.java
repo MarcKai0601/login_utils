@@ -11,7 +11,7 @@ import org.loginutils.common.dto.UserDto;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequest {
+class LoginRequest {
 
     @NotBlank
     private String username;
@@ -25,8 +25,8 @@ public class LoginRequest {
 
     private String memo;
 
-    @NotNull
-    private Long roleId;
+//    @NotNull
+//    private Long roleId;
 
     private String nickname;
 

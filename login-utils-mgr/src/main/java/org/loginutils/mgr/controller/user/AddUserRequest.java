@@ -12,7 +12,7 @@ import org.loginutils.common.dto.UserDto;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddUserRequest {
+class AddUserRequest {
     @NotBlank
     private String username;
 
