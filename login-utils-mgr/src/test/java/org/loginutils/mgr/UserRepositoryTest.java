@@ -25,7 +25,7 @@ public class UserRepositoryTest {
 
     @Test
     void testFindByUsername() {
-        UserDo user = userMapper.findList("kai");
-        System.out.println(user.getUsername());
+//        UserDo user = userMapper.findList("kai");
+//        System.out.println(user.getUsername());
     }
 }

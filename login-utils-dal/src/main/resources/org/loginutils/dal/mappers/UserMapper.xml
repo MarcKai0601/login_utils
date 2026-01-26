@@ -11,7 +11,7 @@
     <select id="findByLogin" resultType="org.loginutils.dal.model.UserDo">
         SELECT *
         FROM k_user
-        WHERE Username = #{username} and Password = #{password}
+        WHERE Username = #{username}
     </select>
 
     <insert id="insert">

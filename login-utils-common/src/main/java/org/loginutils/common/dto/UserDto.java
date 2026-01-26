@@ -12,6 +12,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
+//TODO: 繼承的子類 需使用@EqualsAndHashCode(callSuper = true) ,判斷兩個物件是否相等時，必須連父類別（User）的欄位也一起比較
+
     public static final String PATH_SEPARATOR = "/";
 
     public static final long ADMIN_USER_ID = 1L;
