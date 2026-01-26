@@ -6,9 +6,7 @@ import org.loginutils.dal.model.UserDo;
 @Mapper
 public interface UserMapper {
 
-    UserDo findList(String username);
-
-    UserDo findByLogin(UserDo user);
+    UserDo findLogin(String username);
 
     void insert(UserDo user);
 }
