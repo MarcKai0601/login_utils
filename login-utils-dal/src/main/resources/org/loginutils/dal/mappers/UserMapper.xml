@@ -13,4 +13,55 @@
         VALUES (#{username}, #{password}, #{status}, NOW(), NOW())
     </insert>
 
+    <update id="update" parameterType="org.loginutils.dal.model.UserDo" keyProperty="userId" keyColumn="UserId"
+            flushCache="true">
+        UPDATE k_user
+        <set>
+            <if test="@org.loginutils.dal.utils.Ognl@check(password)">
+                Password = #{password},
+            </if>
+            <if test="@org.loginutils.dal.utils.Ognl@check(status)">
+                Status = #{status},
+            </if>
+            <if test="@org.loginutils.dal.utils.Ognl@check(failedLoginCount)">
+                FailedLoginCount = #{failedLoginCount},
+            </if>
+            <if test="@org.loginutils.dal.utils.Ognl@checkNotNull(memo)">
+                Memo = #{memo},
+            </if>
+<!--            <if test="@org.loginutils.dal.utils.Ognl@check(email)">-->
+<!--                Email = #{email},-->
+<!--            </if>-->
+<!--            <if test="@org.loginutils.dal.utils.Ognl@check(phone)">-->
+<!--                Phone = #{phone},-->
+<!--            </if>-->
+<!--            <if test="@org.loginutils.dal.utils.Ognl@check(parentId)">-->
+<!--                ParentId = #{parentId},-->
+<!--            </if>-->
+<!--            <if test="@org.loginutils.dal.utils.Ognl@check(roleId)">-->
+<!--                RoleId = #{roleId},-->
+<!--            </if>-->
+<!--            <if test="@org.loginutils.dal.utils.Ognl@check(nickname)">-->
+<!--                Nickname = #{nickname},-->
+<!--            </if>-->
+<!--            Updater = #{updater},-->
+            UpdateTime = NOW()
+        </set>
+        WHERE UserId = #{userId}
+    </update>
+
+    <update id="increaseFailedLogin">
+        UPDATE k_user
+        SET FailedLoginCount = FailedLoginCount + 1,
+            LoginTime        = NOW()
+        WHERE UserId = #{userId}
+    </update>
+
+    <update id="updateLogin" keyProperty="userId" keyColumn="UserId" flushCache="true">
+        UPDATE k_user
+        SET LoginTime        = NOW(),
+            FailedLoginCount = 0
+        WHERE UserId = #{userId}
+    </update>
+
 </mapper>

@@ -13,17 +13,24 @@ import java.util.Date;
 @AllArgsConstructor
 public class UserDo {
 
-    private Integer userId;
-
-    private String username;
+    private Long userId;// 用戶ID(唯一)
 
     private String email;
 
-    private String password;
+    private String username;// 用戶帳號
 
-    private Integer status;
+    private String password;// 登錄密碼
 
-    private Date createTime;
+    private Integer status;// 啟用狀態
 
-    private Date updateTime;
+    private Date createTime;// 創建時間
+
+    private Date updateTime;// 修改時間
+
+    private Date loginTime;// 最後登錄時間
+
+    private Long failedLoginCount; // 連續登入失敗次數
+
+    private String memo; // 備註
+
 }

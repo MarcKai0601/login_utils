@@ -27,7 +27,7 @@ public class UserDto {
 
     public static final int DEFAULT_PASSWORD_LENGTH = 8;
 
-    private Integer userId;
+    private Long userId;
 
     private String username;
 

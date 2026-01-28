@@ -9,4 +9,11 @@ public interface UserMapper {
     UserDo findLogin(String username);
 
     void insert(UserDo user);
+
+    int update(UserDo user);
+
+    int increaseFailedLogin(Long userId);
+
+    int updateLogin(UserDo user);
+
 }

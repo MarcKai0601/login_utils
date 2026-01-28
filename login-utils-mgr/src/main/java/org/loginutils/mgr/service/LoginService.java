@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginService {
 
+    private static final int FAILED_LOGIN_MAX_COUNT = 3;
+
     @Autowired
     UserMapper userMapper;
 
@@ -98,16 +100,18 @@ public class LoginService {
 
         if (!user.getPassword().equals(MD5Utils.getMD5String(userDto.getPassword()))) {
             log.info("(username={}, password={}) password is wrong", username, userDto.getPassword());
-//            userMapper.increaseFailedLogin(user.getUserId()); TODO:紀錄登錄失敗次數
-//            if (user.getFailedLoginCount() >= FAILED_LOGIN_MAX_COUNT - 1) {
-//                User record = User.builder()
-//                        .userId(user.getUserId())
-//                        .status(User.STATUS_DISABLED)
-//                        .build();
-//                userMapper.update(record);
-//            }
+            userMapper.increaseFailedLogin(user.getUserId());//  TODO:紀錄登錄失敗次數
+            if (user.getFailedLoginCount() >= FAILED_LOGIN_MAX_COUNT - 1) {
+                UserDo record = UserDo.builder()
+                        .userId(user.getUserId())
+                        .status(UserDto.STATUS_DISABLED)
+                        .build();
+                userMapper.update(record);
+            }
             throw new MgrException(MgrResponseCode.USER_PASSWORD_INVALID);
         }
+
+        userMapper.updateLogin(UserDo.builder().userId(user.getUserId()).build());
 
         log.info("登录成功 username={}", username);
 
