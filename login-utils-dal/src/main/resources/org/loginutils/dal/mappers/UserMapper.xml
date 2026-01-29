@@ -60,7 +60,8 @@
     <update id="updateLogin" keyProperty="userId" keyColumn="UserId" flushCache="true">
         UPDATE k_user
         SET LoginTime        = NOW(),
-            FailedLoginCount = 0
+            FailedLoginCount = 0,
+            LoginIp = #{loginIp}
         WHERE UserId = #{userId}
     </update>
 

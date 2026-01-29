@@ -1,6 +1,8 @@
 package org.loginutils.mgr.controller.login;
 
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.loginutils.common.dto.UserDto;
@@ -22,20 +24,24 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/login")
-    public MgrResponseDto Login(@RequestBody @Valid LoginRequest loginRequest) throws MgrException {
+    public MgrResponseDto Login(@RequestBody @Valid LoginRequest loginRequest,
+                                HttpServletRequest httpServletRequest,
+                                HttpServletResponse servletResponse) throws MgrException {
 
         log.info(loginRequest.toString());
+
+//        String ip = IpUtility.getRequestIp(httpServletRequest);
+        String ip = httpServletRequest.getHeader("X-Forwarded-For");
+
 
         UserDto loginDto = UserDto.builder()
                 .username(loginRequest.getUsername())
                 .password(loginRequest.getPassword())
+                .loginIp(ip)
                 .build();
 
         loginDto = loginService.login(loginDto);
-//        if (loginDto.getUsername() != null && loginDto.getPassword() != null) {
-//            return loginService.login(loginDto);
-//        }
-//        return MgrResponseDto.error(MgrResponseCode.USER_PASSWORD_INVALID);
+
         return MgrResponseDto.success(loginDto);
 
     }

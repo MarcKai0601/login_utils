@@ -81,6 +81,7 @@ public class LoginService {
     public UserDto login(UserDto userDto) throws MgrException {
 
         String username = userDto.getUsername();
+        String ip = userDto.getLoginIp();
 
         log.info("username : " + username);
 //        UserLogin user = userMapper.findLogin(username, merchant);
@@ -111,9 +112,12 @@ public class LoginService {
             throw new MgrException(MgrResponseCode.USER_PASSWORD_INVALID);
         }
 
-        userMapper.updateLogin(UserDo.builder().userId(user.getUserId()).build());
+        userMapper.updateLogin(UserDo.builder()
+                .userId(user.getUserId())
+                .loginIp(ip)
+                .build());
 
-        log.info("登录成功 username={}", username);
+        log.info("登录成功 username={}, IP={}", username, ip);
 
         UserDto userDtoRepson = UserDto.builder()
                 .userId(user.getUserId())

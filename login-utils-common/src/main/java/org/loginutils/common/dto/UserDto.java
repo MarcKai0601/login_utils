@@ -41,4 +41,6 @@ public class UserDto {
 
     private Date updateTime;
 
+    private String loginIp;
+
 }

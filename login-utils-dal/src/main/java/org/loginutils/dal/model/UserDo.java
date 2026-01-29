@@ -27,6 +27,8 @@ public class UserDo {
 
     private Date updateTime;// 修改時間
 
+    private String loginIp;// 最後登錄IP
+
     private Date loginTime;// 最後登錄時間
 
     private Long failedLoginCount; // 連續登入失敗次數

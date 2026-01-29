@@ -36,15 +36,5 @@ public class UserController {
 
         return MgrResponseDto.success("SUCCESS");
 
-
     }
-
-//    public static void main(String[] args) {
-//        boolean a ="OK".equals(HttpStatus.OK.getReasonPhrase());
-//        System.out.println(a);
-//        System.out.println(HttpStatus.OK);
-//        System.out.println(HttpStatus.OK.getReasonPhrase());
-//        System.out.println(HttpStatus.OK.getClass());
-//        System.out.println(HttpStatus.OK);
-//    }
 }
