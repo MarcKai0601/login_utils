@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.loginutils.common.dto.SessionDto;
 import org.loginutils.common.dto.UserDto;
 import org.loginutils.common.dto.repsonse.MgrResponseDto;
 import org.loginutils.common.enums.MgrResponseCode;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.TimeZone;
 
 @Slf4j
 @RestController
@@ -42,6 +45,16 @@ public class LoginController {
                 .build();
 
         loginDto = loginService.login(loginDto);
+
+        String timezone = TimeZone.getDefault().getID();
+
+        SessionDto sessionDto = SessionDto.builder()
+                .userId(loginDto.getUserId())
+                .username(loginDto.getUsername())
+                .status(loginDto.getStatus())
+                .ip(ip)
+                .timezone(timezone)
+                .build();
 
         return MgrResponseDto.success(loginDto);
 
