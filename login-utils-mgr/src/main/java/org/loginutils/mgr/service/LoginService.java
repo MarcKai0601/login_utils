@@ -8,6 +8,7 @@ import org.loginutils.common.utils.hash.MD5Utils;
 import org.loginutils.dal.mappers.UserMapper;
 import org.loginutils.dal.model.UserDo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -18,6 +19,9 @@ public class LoginService {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 //    public UserLogin login(String username, String password, String totpCode, String ip, String merchant) throws XxPayMgrException {
 //        log.info("username : "+username);
@@ -99,7 +103,7 @@ public class LoginService {
             throw new MgrException(MgrResponseCode.USER_DISABLED, username);
         }
 
-        if (!user.getPassword().equals(MD5Utils.getMD5String(userDto.getPassword()))) {
+        if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
             log.info("(username={}, password={}) password is wrong", username, userDto.getPassword());
             userMapper.increaseFailedLogin(user.getUserId());//  TODO:紀錄登錄失敗次數
             if (user.getFailedLoginCount() >= FAILED_LOGIN_MAX_COUNT - 1) {

@@ -11,6 +11,7 @@ import org.loginutils.common.dto.repsonse.MgrResponseDto;
 import org.loginutils.common.enums.MgrResponseCode;
 import org.loginutils.common.exception.MgrException;
 import org.loginutils.mgr.service.LoginService;
+import org.loginutils.mgr.service.TokenService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,9 @@ public class LoginController {
 
     @Resource
     private LoginService loginService;
+
+    @Resource
+    private TokenService tokenService;
 
     @PostMapping("/login")
     public MgrResponseDto Login(@RequestBody @Valid LoginRequest loginRequest,
@@ -56,7 +60,13 @@ public class LoginController {
                 .timezone(timezone)
                 .build();
 
-        return MgrResponseDto.success(loginDto);
+        String token = tokenService.generateToken(loginDto.getUserId());
+        LoginResponse loginResponse = LoginResponse.builder()
+                .token(token)
+                .userId(loginDto.getUserId())
+                .build();
+
+        return MgrResponseDto.success(loginResponse);
 
     }
 }

@@ -8,6 +8,7 @@ import org.loginutils.common.utils.hash.MD5Utils;
 import org.loginutils.dal.mappers.UserMapper;
 import org.loginutils.dal.model.UserDo;
 import org.loginutils.mgr.utils.UserUtil;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.beans.Transient;
@@ -18,6 +19,9 @@ public class UserService {
 
     @Resource
     UserMapper userMapper;
+
+    @Resource
+    PasswordEncoder passwordEncoder;
 
     @Transient
     public void addUser(UserDto userDto){
@@ -34,7 +38,7 @@ public class UserService {
 //        if (StringUtils.isEmpty(password)){
 //            password = UserUtil.generatePassword();
 //        }
-        user.setPassword(MD5Utils.getMD5String(password));
+        user.setPassword(passwordEncoder.encode(password));
 
         userMapper.insert(user);
     }
