@@ -60,7 +60,10 @@ public class LoginController {
                 .timezone(timezone)
                 .build();
 
-        String token = tokenService.generateToken(loginDto.getUserId());
+        String token = tokenService.generateToken(loginDto);
+
+        servletResponse.setHeader("Authorization", "Bearer " + token);
+
         LoginResponse loginResponse = LoginResponse.builder()
                 .token(token)
                 .userId(loginDto.getUserId())

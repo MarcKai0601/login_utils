@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RoleDto {
 
     public static final int STATUS_DISABLED = 0;
@@ -15,4 +19,14 @@ public class RoleDto {
     public static final long AGENT_ADMIN = 1;
     public static final long MERCHANT_ADMIN = 3;
 
+    private Long roleId;
+
+    private String roleCode;
+
+    private String roleName;
+
+    private String systemCode;
+
+    private String systemName;
 }
+

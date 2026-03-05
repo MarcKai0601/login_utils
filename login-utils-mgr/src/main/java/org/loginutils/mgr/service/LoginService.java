@@ -1,15 +1,20 @@
 package org.loginutils.mgr.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.loginutils.common.dto.RoleDto;
 import org.loginutils.common.dto.UserDto;
 import org.loginutils.common.enums.MgrResponseCode;
 import org.loginutils.common.exception.MgrException;
-import org.loginutils.common.utils.hash.MD5Utils;
 import org.loginutils.dal.mappers.UserMapper;
+import org.loginutils.dal.mappers.UserRoleMapper;
 import org.loginutils.dal.model.UserDo;
+import org.loginutils.dal.model.UserRoleDo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -19,6 +24,9 @@ public class LoginService {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    UserRoleMapper userRoleMapper;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -123,10 +131,23 @@ public class LoginService {
 
         log.info("登录成功 username={}, IP={}", username, ip);
 
+        // 查詢該用戶在所有系統中的角色
+        List<UserRoleDo> userRoleDos = userRoleMapper.findRolesByUserId(user.getUserId());
+        List<RoleDto> roles = userRoleDos.stream()
+                .map(ur -> RoleDto.builder()
+                        .roleId(ur.getRoleId())
+                        .roleCode(ur.getRoleCode())
+                        .roleName(ur.getRoleName())
+                        .systemCode(ur.getSystemCode())
+                        .systemName(ur.getSystemName())
+                        .build())
+                .collect(Collectors.toList());
+
         UserDto userDtoRepson = UserDto.builder()
                 .userId(user.getUserId())
                 .username(user.getUsername())
                 .status(user.getStatus())
+                .roles(roles)
                 .build();
 
 
