@@ -8,7 +8,7 @@
         WHERE Username = #{username}
     </select>
 
-    <insert id="insert">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="userId" keyColumn="UserId">
         INSERT INTO k_user (Username, Password, Status, CreateTime, UpdateTime)
         VALUES (#{username}, #{password}, #{status}, NOW(), NOW())
     </insert>

@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.loginutils.common.dto.RoleDto;
 import org.loginutils.common.dto.SessionDto;
 import org.loginutils.common.dto.UserDto;
 import org.loginutils.common.dto.repsonse.MgrResponseDto;
@@ -17,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -64,11 +68,20 @@ public class LoginController {
 
         servletResponse.setHeader("Authorization", "Bearer " + token);
 
+        // 從 loginDto 中提取角色代碼列表
+        List<String> roleCodes = loginDto.getRoles() != null
+                ? loginDto.getRoles().stream()
+                    .map(RoleDto::getRoleCode)
+                    .collect(Collectors.toList())
+                : Collections.emptyList();
+
         LoginResponse loginResponse = LoginResponse.builder()
                 .token(token)
                 .userId(loginDto.getUserId())
+                .roles(roleCodes)
                 .build();
 
+        log.info("準備回傳給前端的 Roles: {}", roleCodes);
         return MgrResponseDto.success(loginResponse);
 
     }
