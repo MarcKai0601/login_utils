@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.loginutils.dal.mappers.RoleMapper">
+
+    <resultMap id="BaseResultMap" type="org.loginutils.dal.model.RoleDo">
+        <id column="RoleId" property="roleId" jdbcType="BIGINT"/>
+        <result column="SystemId" property="systemId" jdbcType="BIGINT"/>
+        <result column="RoleCode" property="roleCode" jdbcType="VARCHAR"/>
+        <result column="RoleName" property="roleName" jdbcType="VARCHAR"/>
+        <result column="Status" property="status" jdbcType="TINYINT"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="org.loginutils.dal.model.RoleDo" useGeneratedKeys="true" keyProperty="roleId">
+        INSERT INTO k_role (SystemId, RoleCode, RoleName, Status, CreateTime, UpdateTime)
+        VALUES (#{systemId}, #{roleCode}, #{roleName}, #{status}, #{createTime}, #{updateTime})
+    </insert>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM k_role WHERE RoleId = #{roleId}
+    </select>
+
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.loginutils.dal.mappers.SystemMapper">
+
+    <resultMap id="BaseResultMap" type="org.loginutils.dal.model.SystemDo">
+        <id column="SystemId" property="systemId" jdbcType="BIGINT"/>
+        <result column="SystemCode" property="systemCode" jdbcType="VARCHAR"/>
+        <result column="SystemName" property="systemName" jdbcType="VARCHAR"/>
+        <result column="Status" property="status" jdbcType="TINYINT"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="org.loginutils.dal.model.SystemDo" useGeneratedKeys="true" keyProperty="systemId">
+        INSERT INTO k_system (SystemCode, SystemName, Status, CreateTime, UpdateTime)
+        VALUES (#{systemCode}, #{systemName}, #{status}, #{createTime}, #{updateTime})
+    </insert>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM k_system WHERE SystemId = #{systemId}
+    </select>
+
+</mapper>

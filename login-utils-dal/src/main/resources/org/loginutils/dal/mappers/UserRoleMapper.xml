@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.loginutils.dal.mappers.UserRoleMapper">
 
-    <select id="findRolesByUserId" resultType="org.loginutils.dal.model.UserRoleDo">
+    <select id="findRolesByUserId" resultType="org.loginutils.common.dto.UserRoleDetailDto">
         SELECT
             ur.Id         AS id,
             ur.UserId     AS userId,

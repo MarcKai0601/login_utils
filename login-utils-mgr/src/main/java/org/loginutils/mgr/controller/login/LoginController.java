@@ -68,20 +68,13 @@ public class LoginController {
 
         servletResponse.setHeader("Authorization", "Bearer " + token);
 
-        // 從 loginDto 中提取角色代碼列表
-        List<String> roleCodes = loginDto.getRoles() != null
-                ? loginDto.getRoles().stream()
-                    .map(RoleDto::getRoleCode)
-                    .collect(Collectors.toList())
-                : Collections.emptyList();
-
         LoginResponse loginResponse = LoginResponse.builder()
                 .token(token)
                 .userId(loginDto.getUserId())
-                .roles(roleCodes)
+                .roles(loginDto.getRoles())
                 .build();
 
-        log.info("準備回傳給前端的 Roles: {}", roleCodes);
+        log.info("準備回傳給前端的 Roles: {}", loginDto.getRoles());
         return MgrResponseDto.success(loginResponse);
 
     }

@@ -5,30 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 用戶角色詳情 DTO — 用於映射 k_user_role JOIN k_role JOIN k_system 的查詢結果
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleDto {
-
-    public static final int STATUS_DISABLED = 0;
-    public static final int STATUS_ENABLED = 1;
-
-    // 預設 roleId
-    public static final long SUPER_ADMIN = 0;
-    public static final long AGENT_ADMIN = 1;
-    public static final long MERCHANT_ADMIN = 3;
-
+public class UserRoleDetailDto {
+    private Long userId;
     private Long roleId;
-    
-    private Long systemId;
-
     private String roleCode;
-
     private String roleName;
-
+    private Long systemId;
     private String systemCode;
-
     private String systemName;
 }
-

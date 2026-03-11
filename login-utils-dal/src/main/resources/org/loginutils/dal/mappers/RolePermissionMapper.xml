@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.loginutils.dal.mappers.RolePermissionMapper">
+
+    <resultMap id="BaseResultMap" type="org.loginutils.dal.model.RolePermissionDo">
+        <id column="Id" property="id" jdbcType="BIGINT"/>
+        <result column="RoleId" property="roleId" jdbcType="BIGINT"/>
+        <result column="PermissionId" property="permissionId" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="org.loginutils.dal.model.RolePermissionDo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO k_role_permission (RoleId, PermissionId)
+        VALUES (#{roleId}, #{permissionId})
+    </insert>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM k_role_permission WHERE Id = #{id}
+    </select>
+
+</mapper>

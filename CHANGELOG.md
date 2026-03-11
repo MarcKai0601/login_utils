@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-03-10 — 全域 CORS 設定、Auth API 實作與 Token 滑動視窗
+
+### 功能新增
+- **全域 CORS (跨域資源放行)**：實作 `WebMvcConfig` 放行 `/**`，允許 `http://localhost:5173` 與 `http://localhost:3000` 跨域請求，並放行 `Authorization` Header 與 `allowCredentials(true)`。同步調整 `SecurityConfig` 的跨域設定。
+- **取得當前使用者狀態 API (`GET /api/v1/auth/me`)**：新增 `AuthController`，接收前端送來的 Bearer Token，呼叫 `TokenService` 驗證 Token 並回傳對應的 `userId` 與這名用戶擁有的系統角色權限列表。
+- **Token 滑動視窗 (Sliding Window)**：修改 `TokenService`，定義預設過期時間為 30 分鐘 (`TOKEN_EXPIRE_MINUTES = 30`)，並新增 `verifyAndExtendToken()` 邏輯。當驗證 Token 成功有效時，透過 `redisTemplate.expire()` 重置 Token 的 Redis 快取存活時間為 30 分鐘，以避免活躍用戶被強制登出。
+
+### 檔案異動
+
+| 模組 | 檔案 | 異動類型 | 說明 |
+|------|------|----------|------|
+| mgr | `WebMvcConfig.java` | NEW | 建立全域 Web CORS 設定，放行前端 Origin (5173 / 3000) 與 Credentials |
+| mgr | `SecurityConfig.java` | MODIFY | 修改 Security CORS `allowedOrigins` 以配合 Credentials 的限制與驗證 |
+| mgr | `AuthController.java` | NEW | 實作 `/api/v1/auth/me`，負責解析 Header 裡的 Authorization Token 並執行驗證 |
+| mgr | `TokenService.java` | MODIFY | 實作滑動視窗延展機制，驗證成功即重置 Token 的 Redis TTL 再延長 30 分鐘 |
+
+---
+
 ## 2026-03-06 — 註冊綁定預設角色 & 登入回傳角色
 
 ### 功能新增

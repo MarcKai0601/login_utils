@@ -59,6 +59,7 @@ public class SecurityConfig {
 
         // 設定允許跨域的前端來源 (開發階段可先設為 "*"，如果前端有帶 Cookie 需明確寫出如 "http://localhost:3000")
         configuration.setAllowedOriginPatterns(List.of("*"));
+//        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:3000"));
 
         // 允許的 HTTP 方法
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));

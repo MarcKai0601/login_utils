@@ -3,6 +3,7 @@ package org.loginutils.mgr.service;
 import lombok.extern.slf4j.Slf4j;
 import org.loginutils.common.dto.RoleDto;
 import org.loginutils.common.dto.UserDto;
+import org.loginutils.common.dto.UserRoleDetailDto;
 import org.loginutils.common.enums.MgrResponseCode;
 import org.loginutils.common.exception.MgrException;
 import org.loginutils.dal.mappers.UserMapper;
@@ -73,16 +74,17 @@ public class LoginService {
         log.info("登录成功 username={}, IP={}", username, ip);
 
         // 查詢該用戶在所有系統中的角色
-        List<UserRoleDo> userRoleDos = userRoleMapper.findRolesByUserId(user.getUserId());
-        List<RoleDto> roles = userRoleDos.stream()
-                .map(ur -> RoleDto.builder()
-                        .roleId(ur.getRoleId())
-                        .roleCode(ur.getRoleCode())
-                        .roleName(ur.getRoleName())
-                        .systemCode(ur.getSystemCode())
-                        .systemName(ur.getSystemName())
-                        .build())
-                .collect(Collectors.toList());
+        List<UserRoleDetailDto> userRoleDetails = userRoleMapper.findRolesByUserId(user.getUserId());
+        List<RoleDto> roles = userRoleDetails.stream().map(ur -> {
+            RoleDto role = new RoleDto();
+            role.setRoleId(ur.getRoleId());
+            role.setSystemId(ur.getSystemId());
+            role.setRoleCode(ur.getRoleCode());
+            role.setRoleName(ur.getRoleName());
+            role.setSystemCode(ur.getSystemCode());
+            role.setSystemName(ur.getSystemName());
+            return role;
+        }).collect(Collectors.toList());
 
         UserDto userDtoRepson = UserDto.builder()
                 .userId(user.getUserId())
