@@ -5,6 +5,8 @@
 ## 2026-03-11 — 漸進式語系判斷 (Language Preferences)
 
 ### 功能新增
+- **單一裝置登入 (Single Active Session)**：在 `TokenService` 中定義反向索引機制（`user_token:{userId}`）。當用戶獲得新的登入 Token 準備寫入 Redis 時，系統會事先檢查該用戶是否已擁有活躍的連線；若有，則主動將舊的連線 (`token:{oldToken}`) 刪除，強制讓前一次的 session 失效，杜絕 Token 無限增生。
+- **滑動視窗強化**：`verifyAndExtendToken()` 驗證機制除延展 Token 自身的過期時間，也同步延展反向索引的 TTL 時效至 30 分鐘，維持雙向資訊存活一致性。
 - **語言偏好持久化**：於 `k_user` 資料表新增 `Language` 欄位，用來儲存使用者的預設語系（如 `zh-TW`, `en`, `ja`, `ko`）。
 - **註冊彈性與預設**：`AddUserRequest` 新增 `language` 接收參數；`UserService` 負責在新建用戶時處理邏輯，若未傳遞語系預設綁定為 `"zh-TW"`。
 - **登入與 Session 同步**：登入時從 `UserDo` 讀取 `language`，並將其放入回傳的 `UserDto` 以及存放在 Redis 的 `SessionDto` 中，確保前後端的語系能完全一致。
@@ -21,6 +23,7 @@
 | mgr | `UserService.java` | MODIFY | 加入未設定語系時，預設填入 `"zh-TW"` 的安全邏輯 |
 | mgr | `LoginService.java` | MODIFY | 登入提取並封裝 `Language` |
 | mgr | `LoginController.java` | MODIFY | SessionDto 同步提取登入的語言偏好塞回 Cache |
+| mgr | `TokenService.java` | MODIFY | 實作反向索引，控制單一裝置登入「踢除」舊 Token 確保唯一有效連線 |
 
 ---
 

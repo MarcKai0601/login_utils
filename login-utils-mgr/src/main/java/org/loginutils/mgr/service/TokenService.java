@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class TokenService {
 
     private static final String TOKEN_PREFIX = "token:";
+    private static final String USER_TOKEN_PREFIX = "user_token:";
     private static final long TOKEN_EXPIRE_MINUTES = 30;
 
     @Autowired
@@ -39,12 +40,26 @@ public class TokenService {
         sessionData.put("roles", userDto.getRoles());
 
         try {
+            // Step 1 & 2: 查詢的反向索引並刪除舊 Token
+            String userTokenKey = USER_TOKEN_PREFIX + userDto.getUserId();
+            String oldToken = stringRedisTemplate.opsForValue().get(userTokenKey);
+            if (oldToken != null && !oldToken.isEmpty()) {
+                stringRedisTemplate.delete(TOKEN_PREFIX + oldToken);
+                log.info("Kick out old connection: userId={}, oldToken={}", userDto.getUserId(), oldToken);
+            }
+
+            // Step 3: 更新新的 Session 資料
             String jsonValue = objectMapper.writeValueAsString(sessionData);
             stringRedisTemplate.opsForValue().set(key, jsonValue, TOKEN_EXPIRE_MINUTES, TimeUnit.MINUTES);
+
+            // Step 4: 刷新反向索引並設定同樣的過期時間
+            stringRedisTemplate.opsForValue().set(userTokenKey, token, TOKEN_EXPIRE_MINUTES, TimeUnit.MINUTES);
+
         } catch (JsonProcessingException e) {
             log.error("Failed to serialize session data for userId={}", userDto.getUserId(), e);
             // Fallback: 僅存 userId
             stringRedisTemplate.opsForValue().set(key, String.valueOf(userDto.getUserId()), TOKEN_EXPIRE_MINUTES, TimeUnit.MINUTES);
+            stringRedisTemplate.opsForValue().set(USER_TOKEN_PREFIX + userDto.getUserId(), token, TOKEN_EXPIRE_MINUTES, TimeUnit.MINUTES);
         }
 
         return token;
@@ -61,12 +76,17 @@ public class TokenService {
         String jsonValue = stringRedisTemplate.opsForValue().get(key);
         
         if (jsonValue != null) {
-            // 重置 Token 存活時間
-            stringRedisTemplate.expire(key, TOKEN_EXPIRE_MINUTES, TimeUnit.MINUTES);
-            
             try {
-                // 嘗試解析 JSON (包含 userId, roles 等)
-                return objectMapper.readValue(jsonValue, Map.class);
+                // 嘗試解析 JSON取得 userId 以延伸 user_token 快取
+                Map<String, Object> sessionData = objectMapper.readValue(jsonValue, Map.class);
+                if (sessionData.containsKey("userId")) {
+                    Object userIdVal = sessionData.get("userId");
+                    stringRedisTemplate.expire(USER_TOKEN_PREFIX + userIdVal.toString(), TOKEN_EXPIRE_MINUTES, TimeUnit.MINUTES);
+                }
+
+                // 重置主要 Token 存活時間
+                stringRedisTemplate.expire(key, TOKEN_EXPIRE_MINUTES, TimeUnit.MINUTES);
+                return sessionData;
             } catch (JsonProcessingException e) {
                 log.error("Failed to deserialize session data from token={}", token, e);
                 // 若解析失敗，但仍為有效的純文字 userId
