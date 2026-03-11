@@ -34,5 +34,7 @@ public class UserDo {
     private Long failedLoginCount; // 連續登入失敗次數
 
     private String memo; // 備註
+    
+    private String language; // 偏好語系
 
 }

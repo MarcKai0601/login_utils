@@ -60,6 +60,7 @@ public class LoginController {
                 .userId(loginDto.getUserId())
                 .username(loginDto.getUsername())
                 .status(loginDto.getStatus())
+                .language(loginDto.getLanguage())
                 .ip(ip)
                 .timezone(timezone)
                 .build();

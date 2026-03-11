@@ -43,6 +43,8 @@ public class UserDto {
     private Date updateTime;
 
     private String loginIp;
+    
+    private String language;
 
     private List<RoleDto> roles;
 

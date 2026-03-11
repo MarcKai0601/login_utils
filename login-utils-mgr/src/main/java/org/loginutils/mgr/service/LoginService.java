@@ -90,6 +90,7 @@ public class LoginService {
                 .userId(user.getUserId())
                 .username(user.getUsername())
                 .status(user.getStatus())
+                .language(user.getLanguage())
                 .roles(roles)
                 .build();
 

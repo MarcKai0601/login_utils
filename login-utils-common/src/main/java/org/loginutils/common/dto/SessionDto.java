@@ -37,4 +37,5 @@ public class SessionDto {
     protected String ip; // ip
 
     protected String timezone;
+    protected String language;
 }

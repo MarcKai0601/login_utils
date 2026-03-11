@@ -2,6 +2,28 @@
 
 ---
 
+## 2026-03-11 — 漸進式語系判斷 (Language Preferences)
+
+### 功能新增
+- **語言偏好持久化**：於 `k_user` 資料表新增 `Language` 欄位，用來儲存使用者的預設語系（如 `zh-TW`, `en`, `ja`, `ko`）。
+- **註冊彈性與預設**：`AddUserRequest` 新增 `language` 接收參數；`UserService` 負責在新建用戶時處理邏輯，若未傳遞語系預設綁定為 `"zh-TW"`。
+- **登入與 Session 同步**：登入時從 `UserDo` 讀取 `language`，並將其放入回傳的 `UserDto` 以及存放在 Redis 的 `SessionDto` 中，確保前後端的語系能完全一致。
+
+### 檔案異動
+
+| 模組 | 檔案 | 異動類型 | 說明 |
+|------|------|----------|------|
+| dal | `UserDo.java` | MODIFY | 新增 `private String language` 屬性 |
+| dal | `UserMapper.xml` | MODIFY | `BaseResultMap` 新增 mapping，`insert`/`update` 邏輯納入 `Language` 欄位處理 |
+| common | `UserDto.java` | MODIFY | 擴充 `language` 屬性承載資料 |
+| common | `SessionDto.java` | MODIFY | 擴充 `language` 屬性使 Token 可反解出語系 |
+| mgr | `AddUserRequest.java` | MODIFY | 請求參數新增 `language` |
+| mgr | `UserService.java` | MODIFY | 加入未設定語系時，預設填入 `"zh-TW"` 的安全邏輯 |
+| mgr | `LoginService.java` | MODIFY | 登入提取並封裝 `Language` |
+| mgr | `LoginController.java` | MODIFY | SessionDto 同步提取登入的語言偏好塞回 Cache |
+
+---
+
 ## 2026-03-10 — 全域 CORS 設定、Auth API 實作與 Token 滑動視窗
 
 ### 功能新增

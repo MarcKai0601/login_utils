@@ -33,10 +33,15 @@ public class UserService {
     @Transactional(rollbackFor = Exception.class)
     public void addUser(UserDto userDto) {
 
+        String lang = (userDto.getLanguage() != null && !userDto.getLanguage().trim().isEmpty()) 
+                ? userDto.getLanguage() 
+                : "zh-TW";
+
         UserDo user = UserDo.builder()
                 .username(userDto.getUsername())
                 .password(userDto.getPassword())
                 .status(userDto.getStatus())
+                .language(lang)
                 .build();
 
         String password = user.getPassword();
