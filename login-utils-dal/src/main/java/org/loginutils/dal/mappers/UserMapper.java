@@ -8,6 +8,8 @@ public interface UserMapper {
 
     UserDo findLogin(String username);
 
+    UserDo findById(Long userId);
+
     void insert(UserDo user);
 
     int update(UserDo user);

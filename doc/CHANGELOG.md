@@ -2,9 +2,24 @@
 
 ---
 
+## 2026-03-12 — 系統版號 API (System Version API)
+
+### 功能新增
+- **系統版號公開 API (`GET /api/v1/system/version`)**：新增 `SystemController`，提供前端抓取系統當前版號。版號定義於 `application.properties` 中 (`system.mgr.version`)。
+
+### 檔案異動
+
+| 模組 | 檔案 | 異動類型 | 說明 |
+|------|------|----------|------|
+| mgr | `application.properties` | MODIFY | 新增 `system.mgr.version=R20260312v2.0.0` 屬性 |
+| mgr | `SystemController.java` | NEW | 實作 `/api/v1/system/version` GET 路由，回傳 `system.mgr.version` |
+
+---
+
 ## 2026-03-11 — 漸進式語系判斷 (Language Preferences)
 
 ### 功能新增
+- **修改密碼 API (`PUT /api/mgr/user/password`)**：新增一支允許當前登入者修改自己的密碼的功能。API 會自動從 `Authorization` Token 中解析 `userId`，並在後端 `UserService` 使用 `BCrypt` 比對 `oldPassword`；若比對成功，則自動加密 `newPassword` 並更新資料庫紀錄。
 - **單一裝置登入 (Single Active Session)**：在 `TokenService` 中定義反向索引機制（`user_token:{userId}`）。當用戶獲得新的登入 Token 準備寫入 Redis 時，系統會事先檢查該用戶是否已擁有活躍的連線；若有，則主動將舊的連線 (`token:{oldToken}`) 刪除，強制讓前一次的 session 失效，杜絕 Token 無限增生。
 - **滑動視窗強化**：`verifyAndExtendToken()` 驗證機制除延展 Token 自身的過期時間，也同步延展反向索引的 TTL 時效至 30 分鐘，維持雙向資訊存活一致性。
 - **語言偏好持久化**：於 `k_user` 資料表新增 `Language` 欄位，用來儲存使用者的預設語系（如 `zh-TW`, `en`, `ja`, `ko`）。
@@ -20,9 +35,11 @@
 | common | `UserDto.java` | MODIFY | 擴充 `language` 屬性承載資料 |
 | common | `SessionDto.java` | MODIFY | 擴充 `language` 屬性使 Token 可反解出語系 |
 | mgr | `AddUserRequest.java` | MODIFY | 請求參數新增 `language` |
-| mgr | `UserService.java` | MODIFY | 加入未設定語系時，預設填入 `"zh-TW"` 的安全邏輯 |
+| mgr | `UpdatePasswordRequest.java` | NEW | 接收使用者的舊密碼 (`oldPassword`) 與新密碼 (`newPassword`) |
+| mgr | `UserService.java` | MODIFY | 實作 `updatePassword`，負責驗證舊密碼與雜湊新密碼後存入資料庫 |
 | mgr | `LoginService.java` | MODIFY | 登入提取並封裝 `Language` |
 | mgr | `LoginController.java` | MODIFY | SessionDto 同步提取登入的語言偏好塞回 Cache |
+| mgr | `UserController.java` | MODIFY | 實作 `/password` PUT 路由並串接 `TokenService` 提取身份 |
 | mgr | `TokenService.java` | MODIFY | 實作反向索引，控制單一裝置登入「踢除」舊 Token 確保唯一有效連線 |
 
 ---

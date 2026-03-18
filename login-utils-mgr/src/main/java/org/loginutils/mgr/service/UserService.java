@@ -7,6 +7,7 @@ import org.loginutils.dal.mappers.UserMapper;
 import org.loginutils.dal.mappers.UserRoleMapper;
 import org.loginutils.dal.model.UserDo;
 import org.loginutils.dal.model.UserRoleDo;
+import org.loginutils.common.exception.MgrException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,5 +61,28 @@ public class UserService {
         userRoleMapper.insertUserRole(userRole);
 
         log.info("已為 userId={} 綁定預設角色 roleId={}", user.getUserId(), DEFAULT_ROLE_ID);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updatePassword(Long userId, String oldPassword, String newPassword) throws MgrException {
+        UserDo user = userMapper.findById(userId);
+        if (user == null) {
+            log.warn("updatePassword failed: userId={} not found", userId);
+            throw new MgrException(org.loginutils.common.enums.MgrResponseCode.USER_NOT_FOUND);
+        }
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            log.warn("updatePassword failed: incorrect old password for userId={}", userId);
+            throw new MgrException(org.loginutils.common.enums.MgrResponseCode.USER_PASSWORD_INVALID, "舊密碼錯誤");
+        }
+
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
+        UserDo updateRecord = UserDo.builder()
+                .userId(userId)
+                .password(encodedNewPassword)
+                .build();
+
+        userMapper.update(updateRecord);
+        log.info("Successfully updated password for userId={}", userId);
     }
 }

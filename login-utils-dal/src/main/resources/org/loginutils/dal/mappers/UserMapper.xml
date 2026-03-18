@@ -23,6 +23,12 @@
         WHERE Username = #{username}
     </select>
 
+    <select id="findById" resultType="org.loginutils.dal.model.UserDo">
+        SELECT *
+        FROM k_user
+        WHERE UserId = #{userId}
+    </select>
+
     <insert id="insert" useGeneratedKeys="true" keyProperty="userId" keyColumn="UserId">
         INSERT INTO k_user (Username, Password, Status, Language, CreateTime, UpdateTime)
         VALUES (#{username}, #{password}, #{status}, #{language}, NOW(), NOW())
