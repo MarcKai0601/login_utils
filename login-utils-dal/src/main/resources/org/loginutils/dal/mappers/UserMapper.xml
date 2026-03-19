@@ -11,6 +11,7 @@
         <result column="Language" property="language" jdbcType="VARCHAR"/>
         <result column="PwdResetCount" property="pwdResetCount" jdbcType="INTEGER"/>
         <result column="PwdResetWindowStart" property="pwdResetWindowStart" jdbcType="TIMESTAMP"/>
+        <result column="IsTempPassword" property="isTempPassword" jdbcType="TINYINT"/>
         <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
         <result column="LoginIp" property="loginIp" jdbcType="VARCHAR"/>
@@ -38,8 +39,8 @@
     </select>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="userId" keyColumn="UserId">
-        INSERT INTO k_user (Email, Username, Password, Status, Language, PwdResetCount, PwdResetWindowStart, CreateTime, UpdateTime)
-        VALUES (#{email}, #{username}, #{password}, #{status}, #{language}, #{pwdResetCount}, #{pwdResetWindowStart}, NOW(), NOW())
+        INSERT INTO k_user (Email, Username, Password, Status, Language, PwdResetCount, PwdResetWindowStart, IsTempPassword, CreateTime, UpdateTime)
+        VALUES (#{email}, #{username}, #{password}, #{status}, #{language}, #{pwdResetCount}, #{pwdResetWindowStart}, #{isTempPassword}, NOW(), NOW())
     </insert>
 
     <update id="update" parameterType="org.loginutils.dal.model.UserDo" keyProperty="userId" keyColumn="UserId"
@@ -72,6 +73,9 @@
             </if>
             <if test="pwdResetWindowStart != null">
                 PwdResetWindowStart = #{pwdResetWindowStart},
+            </if>
+            <if test="isTempPassword != null">
+                IsTempPassword = #{isTempPassword},
             </if>
 <!--            <if test="@org.loginutils.dal.utils.Ognl@check(phone)">-->
 <!--                Phone = #{phone},-->

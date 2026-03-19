@@ -13,6 +13,7 @@ import org.loginutils.common.enums.MgrResponseCode;
 import org.loginutils.common.exception.MgrException;
 import org.loginutils.mgr.service.LoginService;
 import org.loginutils.mgr.service.TokenService;
+import org.loginutils.mgr.utils.IpUtility;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +44,7 @@ public class LoginController {
 
 //        TODO: 抓取用戶的IP 但是並不完善 因為有可能在不同的Header 有IP
 //        String ip = httpServletRequest.getHeader("X-Forwarded-For");
-        String ip = org.loginutils.mgr.utils.IpUtility.getRequestIp(httpServletRequest);
+        String ip = IpUtility.getRequestIp(httpServletRequest);
         UserDto loginDto = UserDto.builder()
                 .username(loginRequest.getUsername())
                 .password(loginRequest.getPassword())
@@ -51,6 +52,7 @@ public class LoginController {
                 .build();
 
         loginDto = loginService.login(loginDto);
+        log.info(loginDto.toString());
 
         String timezone = TimeZone.getDefault().getID();
 

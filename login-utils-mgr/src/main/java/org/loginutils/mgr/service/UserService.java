@@ -13,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 @Service
 @Slf4j
 public class UserService {
@@ -33,7 +35,7 @@ public class UserService {
     PasswordEncoder passwordEncoder;
 
     @Resource
-    MockEmailService mockEmailService;
+    EmailService emailService;
 
     @Transactional(rollbackFor = Exception.class)
     public void addUser(UserDto userDto) throws MgrException {
@@ -92,6 +94,7 @@ public class UserService {
         UserDo updateRecord = UserDo.builder()
                 .userId(userId)
                 .password(encodedNewPassword)
+                .isTempPassword(0)
                 .build();
 
         userMapper.update(updateRecord);
@@ -106,9 +109,9 @@ public class UserService {
             throw new MgrException(org.loginutils.common.enums.MgrResponseCode.USER_NOT_FOUND);
         }
 
-        java.util.Date now = new java.util.Date();
+        Date now = new Date();
         Integer currentCount = user.getPwdResetCount() != null ? user.getPwdResetCount() : 0;
-        java.util.Date windowStart = user.getPwdResetWindowStart();
+        Date windowStart = user.getPwdResetWindowStart();
 
         long THIRTY_DAYS_MS = 30L * 24 * 60 * 60 * 1000;
 
@@ -134,11 +137,12 @@ public class UserService {
                 .password(encodedPassword)
                 .pwdResetCount(currentCount)
                 .pwdResetWindowStart(windowStart)
+                .isTempPassword(1)
                 .build();
 
         userMapper.update(updateRecord);
 
-        // Send out notification
-        mockEmailService.sendPasswordResetEmail(email, newRawPassword);
+        // Send out notification via real SMTP
+        emailService.sendPasswordResetEmail(email, newRawPassword);
     }
 }

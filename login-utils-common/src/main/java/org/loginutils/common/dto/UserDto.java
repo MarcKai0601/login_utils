@@ -50,6 +50,8 @@ public class UserDto {
 
     private Integer pwdResetCount; // 密碼重設次數
 
-    private java.util.Date pwdResetWindowStart; // 密碼重設週期起算時間
+    private Date pwdResetWindowStart; // 密碼重設週期起算時間
+
+    private Integer isTempPassword; // 是否為臨時密碼(前端依賴此做判斷)
 
 }

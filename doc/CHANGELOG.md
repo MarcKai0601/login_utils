@@ -2,6 +2,26 @@
 
 ---
 
+## 2026-03-19 (Update 2) — Spring Web Mail 與一次性密碼 (OTP) 強制更新機制
+
+### 功能新增
+- **真實郵件派送 (`Spring Boot Mail`)**：正式捨棄 Mock 發信，於 `pom.xml` 導入 `spring-boot-starter-mail`，並實作 `EmailService` 進行實體信件派發。信件內容內涵「一次性密碼宣告」與安全免責聲明。
+- **一次性密碼 (OTP) 標記**：資料庫 `k_user` 新增 `IsTempPassword` (0=正常, 1=臨時) 核心註記。當使用者重設信箱密碼時自動標記為 `1`；當使用者登入後成功修改密碼 (`updatePassword`) 時會自動解除並降回 `0`。此標記現已同步附帶於登入回傳的 `UserDto` 內，供前端檢核並強制引導至重設頁面。
+
+### 檔案異動
+| 模組 | 檔案 | 異動類型 | 說明 |
+|------|------|----------|------|
+| sql | `update_temp_password.sql` | NEW | 新增 `IsTempPassword` 欄位的 MySQL 結構修正腳本 |
+| dal | `UserDo.java`, `UserDto.java` | MODIFY | 增設 `isTempPassword` 以傳遞臨時密碼狀態 |
+| dal | `UserMapper.xml` | MODIFY | 更新了 MyBatis 的 `<insert>` 與 `<update>` 指令以支援 OTP 狀態變更寫入 |
+| mgr | `pom.xml` | MODIFY | 加入 `spring-boot-starter-mail` 依賴 |
+| mgr | `application.properties` | MODIFY | 預先載入 Spring SMTP Configuration 基礎對接參數 |
+| mgr | `UserService.java` | MODIFY | 擴充了覆寫密碼與重設密碼時控制 `isTempPassword = 1` 或 `0` 的機制 |
+| mgr | `LoginService.java` | MODIFY | 登入完成回傳時交還 `isTempPassword` 使前端專案可擷取 |
+| mgr | `EmailService.java` | NEW | 取代了原本的 `MockEmailService`，引入了嚴謹有免責聲明的 `JavaMailSender` |
+
+---
+
 ## 2026-03-19 — 忘記密碼與 Email 登入升級 (Forgot Password & Email Login)
 
 ### 功能新增

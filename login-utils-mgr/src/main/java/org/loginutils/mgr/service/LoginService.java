@@ -91,6 +91,7 @@ public class LoginService {
                 .username(user.getUsername())
                 .status(user.getStatus())
                 .language(user.getLanguage())
+                .isTempPassword(user.getIsTempPassword())
                 .roles(roles)
                 .build();
 

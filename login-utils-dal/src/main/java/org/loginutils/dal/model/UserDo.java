@@ -41,4 +41,6 @@ public class UserDo {
 
     private Date pwdResetWindowStart; // 密碼重設週期起算時間
 
+    private Integer isTempPassword; // 是否為臨時密碼
+
 }
