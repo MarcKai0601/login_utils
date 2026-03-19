@@ -2,6 +2,7 @@ package org.loginutils.mgr.service;
 
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.loginutils.common.dto.UserDto;
 import org.loginutils.dal.mappers.UserMapper;
 import org.loginutils.dal.mappers.UserRoleMapper;
@@ -31,18 +32,29 @@ public class UserService {
     @Resource
     PasswordEncoder passwordEncoder;
 
+    @Resource
+    MockEmailService mockEmailService;
+
     @Transactional(rollbackFor = Exception.class)
-    public void addUser(UserDto userDto) {
+    public void addUser(UserDto userDto) throws MgrException {
+
+        // 檢查 Email 是否已存在
+        if (userDto.getEmail() != null && userMapper.selectByUsernameOrEmail(userDto.getEmail()) != null) {
+            log.warn("Registration blocked: Email {} already exists", userDto.getEmail());
+            throw new MgrException(org.loginutils.common.enums.MgrResponseCode.EMAIL_ALREADY_EXISTS);
+        }
 
         String lang = (userDto.getLanguage() != null && !userDto.getLanguage().trim().isEmpty()) 
                 ? userDto.getLanguage() 
                 : "zh-TW";
 
         UserDo user = UserDo.builder()
+                .email(userDto.getEmail())
                 .username(userDto.getUsername())
                 .password(userDto.getPassword())
                 .status(userDto.getStatus())
                 .language(lang)
+                .pwdResetCount(0)
                 .build();
 
         String password = user.getPassword();
@@ -84,5 +96,49 @@ public class UserService {
 
         userMapper.update(updateRecord);
         log.info("Successfully updated password for userId={}", userId);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void resetPassword(String email) throws MgrException {
+        UserDo user = userMapper.selectByUsernameOrEmail(email);
+        if (user == null) {
+            log.warn("Forgot Password failed: user mapped to email {} not found", email);
+            throw new MgrException(org.loginutils.common.enums.MgrResponseCode.USER_NOT_FOUND);
+        }
+
+        java.util.Date now = new java.util.Date();
+        Integer currentCount = user.getPwdResetCount() != null ? user.getPwdResetCount() : 0;
+        java.util.Date windowStart = user.getPwdResetWindowStart();
+
+        long THIRTY_DAYS_MS = 30L * 24 * 60 * 60 * 1000;
+
+        if (windowStart == null || (now.getTime() - windowStart.getTime() > THIRTY_DAYS_MS)) {
+            // New Window
+            windowStart = now;
+            currentCount = 1;
+        } else {
+            // Extant Window
+            if (currentCount >= 3) {
+                log.warn("Forgot Password limit exceeded for userId={}", user.getUserId());
+                throw new MgrException(org.loginutils.common.enums.MgrResponseCode.PWD_RESET_LIMIT_EXCEEDED);
+            }
+            currentCount++;
+        }
+
+        // 使用密碼學安全的亂數產生器
+        String newRawPassword = RandomStringUtils.secure().nextAlphanumeric(8);
+        String encodedPassword = passwordEncoder.encode(newRawPassword);
+
+        UserDo updateRecord = UserDo.builder()
+                .userId(user.getUserId())
+                .password(encodedPassword)
+                .pwdResetCount(currentCount)
+                .pwdResetWindowStart(windowStart)
+                .build();
+
+        userMapper.update(updateRecord);
+
+        // Send out notification
+        mockEmailService.sendPasswordResetEmail(email, newRawPassword);
     }
 }

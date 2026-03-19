@@ -12,8 +12,13 @@ import org.loginutils.common.dto.UserDto;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-class AddUserRequest {
-    @NotBlank
+public class AddUserRequest {
+
+    //    TODO: 需要加上Email
+    @NotBlank(message = "Email is required")
+    private String email;
+
+    @NotBlank(message = "使用者名稱不得為空白")
     private String username;
 
     @NotBlank
@@ -30,8 +35,6 @@ class AddUserRequest {
     private Long roleId;
 
     private String nickname;
-
-    private String email;
 
     private String phone;
     

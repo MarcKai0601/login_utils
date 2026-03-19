@@ -2,6 +2,31 @@
 
 ---
 
+## 2026-03-19 — 忘記密碼與 Email 登入升級 (Forgot Password & Email Login)
+
+### 功能新增
+- **引進 Email 登入基石**：升級重構底層查詢，打通了 `LoginService` 的輸入機制，現在使用者可以在帳號欄直接輸入 Email 或是 Username 來進行登入。
+- **忘記密碼與重啟 API (`POST /api/v1/auth/forgot-password`)**：新增端點提供使用者重發新密碼信件。服務層內置了同時間視窗 (30天) 最多 3 次的限流防護設計，保護系統免於短時間密集騷擾。
+- **Mock Mail 模擬系統**：先期預留了發送真實 Email 的彈性，暫時以 `MockEmailService` 利用 `log.info` 在後台列印，後續若要切換為 Spring Mail 可以直接抽換。
+- **註冊 Email 防撞機制**：在註冊時強制綁定了 Email 為必填 (`@NotBlank`)，並擴充了獨佔性驗證：若信箱已被其他帳號使用，將回報 `EMAIL_ALREADY_EXISTS` 錯誤。
+
+### 檔案異動
+
+| 模組 | 檔案 | 異動類型 | 說明 |
+|------|------|----------|------|
+| sql | `update_k_user.sql` | NEW | 修改 `k_user` 新增 Unique Index 並掛載 `pwd_reset_count` 與 `pwd_reset_window_start` |
+| dal | `UserDo.java` & `UserDto.java` | MODIFY | 擴充實體屬性對接密碼重設的控管 |
+| dal | `UserMapper.xml` & `.java` | MODIFY | 寫入 `<select id="selectByUsernameOrEmail">` |
+| common | `MgrResponseCode.java` | MODIFY | 新增 `EMAIL_REQUIRED`, `EMAIL_ALREADY_EXISTS`, `PWD_RESET_LIMIT_EXCEEDED` 等定義 |
+| mgr | `AddUserRequest.java` | MODIFY | 強制 Email 不可為空 |
+| mgr | `UserService.java` | MODIFY | 加入註冊唯一性排他邏輯，並撰寫了 `resetPassword()` 重設邏輯 |
+| mgr | `LoginService.java` | MODIFY | 放寬驗證查找方式 `userMapper.selectByUsernameOrEmail` |
+| mgr | `MockEmailService.java` | NEW | 初步模擬實作派發郵件流程的類別 |
+| mgr | `AuthController.java` | MODIFY | 增設開放的 REST 端點 `@PostMapping("/forgot-password")` |
+| mgr | `ForgotPasswordRequest.java` | NEW | 對應忘記密碼封裝的 Request DTO |
+
+---
+
 ## 2026-03-12 — 系統版號 API (System Version API)
 
 ### 功能新增

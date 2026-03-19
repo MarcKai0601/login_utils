@@ -23,10 +23,18 @@ public enum MgrResponseCode {
     DB_DUPLICATE_ENTRY("0202", "The database has the same primary key data"),
 
 
-    //翻译 中:账户不存在 英:Account does not exist
-    USER_NOT_FOUND("0301", "Account does not exist"),
+    //翻译 中:账户不存在 英:User not found
+    USER_NOT_FOUND("0301", "User not found"),
     //翻译 中:账户已禁用 英:Account disabled
     USER_DISABLED("0302", "Account disabled"),
+    //翻译 中:邮箱不可留白 英:Email is required
+    EMAIL_REQUIRED("0313", "Email is required"),
+    //翻译 中:邮箱已存在 英:Email already exists
+    EMAIL_ALREADY_EXISTS("0314", "Email already exists"),
+    //翻译 中:邮箱不存在 英:Email already exists
+    EMAIL_NOT_EXISTS("0315", "Email not exists"),
+    //翻译 中:密码重设上限已被触发 英:Password reset limit exceeded. Maximum 3 times per 30 days.
+    PWD_RESET_LIMIT_EXCEEDED("0316", "Password reset limit exceeded. Maximum 3 times per 30 days."),
     //翻译 中:密码错误 英:Wrong password
     USER_PASSWORD_INVALID("0303", "Wrong password"),
     //翻译 中:账户没有权限 英:Account does not have permission

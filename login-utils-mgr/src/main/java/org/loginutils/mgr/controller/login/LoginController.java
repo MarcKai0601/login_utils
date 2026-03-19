@@ -41,11 +41,9 @@ public class LoginController {
 
         log.info(loginRequest.toString());
 
-//        String ip = IpUtility.getRequestIp(httpServletRequest);
 //        TODO: 抓取用戶的IP 但是並不完善 因為有可能在不同的Header 有IP
-        String ip = httpServletRequest.getHeader("X-Forwarded-For");
-
-
+//        String ip = httpServletRequest.getHeader("X-Forwarded-For");
+        String ip = org.loginutils.mgr.utils.IpUtility.getRequestIp(httpServletRequest);
         UserDto loginDto = UserDto.builder()
                 .username(loginRequest.getUsername())
                 .password(loginRequest.getPassword())

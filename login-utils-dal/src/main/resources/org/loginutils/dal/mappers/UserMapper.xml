@@ -9,6 +9,8 @@
         <result column="Password" property="password" jdbcType="VARCHAR"/>
         <result column="Status" property="status" jdbcType="TINYINT"/>
         <result column="Language" property="language" jdbcType="VARCHAR"/>
+        <result column="PwdResetCount" property="pwdResetCount" jdbcType="INTEGER"/>
+        <result column="PwdResetWindowStart" property="pwdResetWindowStart" jdbcType="TIMESTAMP"/>
         <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
         <result column="LoginIp" property="loginIp" jdbcType="VARCHAR"/>
@@ -29,9 +31,15 @@
         WHERE UserId = #{userId}
     </select>
 
+    <select id="selectByUsernameOrEmail" resultType="org.loginutils.dal.model.UserDo">
+        SELECT *
+        FROM k_user
+        WHERE Username = #{email} OR Email = #{email}
+    </select>
+
     <insert id="insert" useGeneratedKeys="true" keyProperty="userId" keyColumn="UserId">
-        INSERT INTO k_user (Username, Password, Status, Language, CreateTime, UpdateTime)
-        VALUES (#{username}, #{password}, #{status}, #{language}, NOW(), NOW())
+        INSERT INTO k_user (Email, Username, Password, Status, Language, PwdResetCount, PwdResetWindowStart, CreateTime, UpdateTime)
+        VALUES (#{email}, #{username}, #{password}, #{status}, #{language}, #{pwdResetCount}, #{pwdResetWindowStart}, NOW(), NOW())
     </insert>
 
     <update id="update" parameterType="org.loginutils.dal.model.UserDo" keyProperty="userId" keyColumn="UserId"
@@ -53,9 +61,18 @@
             <if test="@org.loginutils.dal.utils.Ognl@checkNotNull(language)">
                 Language = #{language},
             </if>
-<!--            <if test="@org.loginutils.dal.utils.Ognl@check(email)">-->
-<!--                Email = #{email},-->
-<!--            </if>-->
+            <if test="@org.loginutils.dal.utils.Ognl@check(email)">
+                Email = #{email},
+            </if>
+            <if test="@org.loginutils.dal.utils.Ognl@checkNotNull(pwdResetCount)">
+                PwdResetCount = #{pwdResetCount},
+            </if>
+            <if test="pwdResetWindowStart != null or pwdResetWindowStart == null">
+                <!-- If it allows null, we'll map it straight, else we just do standard if != null -->
+            </if>
+            <if test="pwdResetWindowStart != null">
+                PwdResetWindowStart = #{pwdResetWindowStart},
+            </if>
 <!--            <if test="@org.loginutils.dal.utils.Ognl@check(phone)">-->
 <!--                Phone = #{phone},-->
 <!--            </if>-->

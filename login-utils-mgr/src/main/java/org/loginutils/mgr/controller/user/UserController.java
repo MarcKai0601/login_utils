@@ -33,7 +33,7 @@ public class UserController {
 
     @PostMapping("/add")
     @ResponseBody
-    public MgrResponseDto addUser(@RequestBody AddUserRequest addUserRequest) {
+    public MgrResponseDto addUser(@RequestBody AddUserRequest addUserRequest) throws MgrException {
 
         UserDto userDto = UserDto.builder()
                 .username(addUserRequest.getUsername())
@@ -50,7 +50,7 @@ public class UserController {
     }
 
     // 💡 修正 2：簡化參數列，並使用正常的 Import
-    @PutMapping("/password")
+    @PutMapping("/update-password")
     public MgrResponseDto updatePassword(
             @RequestBody @Valid UpdatePasswordRequest request,
             HttpServletRequest httpRequest) throws MgrException {

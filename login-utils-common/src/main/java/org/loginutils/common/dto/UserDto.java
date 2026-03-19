@@ -48,4 +48,8 @@ public class UserDto {
 
     private List<RoleDto> roles;
 
+    private Integer pwdResetCount; // 密碼重設次數
+
+    private java.util.Date pwdResetWindowStart; // 密碼重設週期起算時間
+
 }

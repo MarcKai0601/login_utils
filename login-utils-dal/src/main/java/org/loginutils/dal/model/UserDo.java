@@ -37,4 +37,8 @@ public class UserDo {
     
     private String language; // 偏好語系
 
+    private Integer pwdResetCount; // 密碼重設次數
+
+    private Date pwdResetWindowStart; // 密碼重設週期起算時間
+
 }

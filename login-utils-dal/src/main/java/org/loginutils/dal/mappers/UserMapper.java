@@ -1,6 +1,7 @@
 package org.loginutils.dal.mappers;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.loginutils.dal.model.UserDo;
 
 @Mapper
@@ -9,6 +10,8 @@ public interface UserMapper {
     UserDo findLogin(String username);
 
     UserDo findById(Long userId);
+
+    UserDo selectByUsernameOrEmail(@Param("email") String email);
 
     void insert(UserDo user);
 

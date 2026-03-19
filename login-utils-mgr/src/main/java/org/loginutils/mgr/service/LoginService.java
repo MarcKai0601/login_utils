@@ -41,7 +41,7 @@ public class LoginService {
 //        UserLogin user = userMapper.findLogin(username, merchant);
 
 //      TODO:目前並沒有做權限（Role）相關的功能
-        UserDo user = userMapper.findLogin(username);
+        UserDo user = userMapper.selectByUsernameOrEmail(username);
 
         if (user == null) {
             log.info("username={} does not exist", username);
