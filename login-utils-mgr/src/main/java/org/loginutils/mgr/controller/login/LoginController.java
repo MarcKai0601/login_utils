@@ -73,7 +73,9 @@ public class LoginController {
                 .token(token)
                 .userId(loginDto.getUserId())
                 .roles(loginDto.getRoles())
+                .isTempPassword(loginDto.getIsTempPassword())  // ← 新增這行
                 .build();
+
 
         log.info("準備回傳給前端的 Roles: {}", loginDto.getRoles());
         return MgrResponseDto.success(loginResponse);

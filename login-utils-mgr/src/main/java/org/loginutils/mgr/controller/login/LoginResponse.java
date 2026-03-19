@@ -16,4 +16,5 @@ public class LoginResponse {
     private String token;
     private Long userId;
     private List<RoleDto> roles;
+    private Integer isTempPassword;
 }
