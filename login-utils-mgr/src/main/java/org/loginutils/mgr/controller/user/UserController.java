@@ -39,6 +39,7 @@ public class UserController {
                 .username(addUserRequest.getUsername())
                 .password(addUserRequest.getPassword())
                 .status(addUserRequest.getStatus())
+                .email(addUserRequest.getEmail())
                 .build();
 
         log.info(addUserRequest.toString());
