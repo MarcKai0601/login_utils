@@ -1,21 +1,34 @@
+CREATE DATABASE IF NOT EXISTS login_components
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+
+USE login_components;
+
 -- auto-generated definition
 create table k_user
 (
-    UserId           bigint unsigned auto_increment comment '帳戶ID'
+    UserId              bigint unsigned auto_increment comment '帳戶ID'
         primary key,
-    Email            varchar(30)                 null,
-    Username         varchar(30)                 not null comment '登录账户',
-    Password         varchar(60)                 null comment '登录密码',
-    Status           tinyint                     not null comment '狀態,1-启用,0-禁用',
-    CreateTime       timestamp                   null comment '創建時間',
-    UpdateTime       timestamp                   not null comment '修改時間',
-    LoginIp          varchar(64)                 null comment '最後登錄IP',
-    Language         varchar(10) default 'zh-TW' null comment '使用者偏好語系 (zh-TW, en, ja, ko)',
-    LoginTime        timestamp                   null comment '最後登錄時間',
-    FailedLoginCount bigint      default 0       not null comment '連續登入失敗次數',
-    Memo             varchar(255)                null comment '備註'
+    Email               varchar(255)                not null,
+    Username            varchar(30)                 not null comment '登录账户',
+    Password            varchar(60)                 null comment '登录密码',
+    Status              tinyint                     not null comment '狀態,1-启用,0-禁用',
+    CreateTime          timestamp                   null comment '創建時間',
+    UpdateTime          timestamp                   not null comment '修改時間',
+    LoginIp             varchar(64)                 null comment '最後登錄IP',
+    Language            varchar(10) default 'zh-TW' null comment '使用者偏好語系 (zh-TW, en, ja, ko)',
+    LoginTime           timestamp                   null comment '最後登錄時間',
+    FailedLoginCount    bigint      default 0       not null comment '連續登入失敗次數',
+    Memo                varchar(255)                null comment '備註',
+    PwdResetCount       int         default 0       null comment '密碼重設次數',
+    PwdResetWindowStart datetime                    null comment '密碼重設30天週期起算日',
+    IsTempPassword      tinyint     default 0       null comment '是否為臨時密碼(0:否, 1:是)',
+    constraint idx_k_user_email
+        unique (Email)
 )
     comment '用户（賬戶）表';
+
+
 
 -- =============================================
 -- RBAC 多系統權限資料表
