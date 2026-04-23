@@ -1,24 +1,19 @@
 #!/bin/sh
 
-echo "正在啟動 Tailscale Daemon (Userspace 模式)..."
-# 啟動 Tailscale 並開啟 SOCKS5 代理伺服器在 localhost:1055
+echo "Starting Tailscale Daemon in Userspace mode..."
 /usr/sbin/tailscaled --tun=userspace-networking --socks5-server=localhost:1055 &
-
-# 等待 daemon 啟動
 sleep 3
 
 if [ -z "${TAILSCALE_AUTHKEY}" ]; then
-  echo "錯誤: 尚未設定 TAILSCALE_AUTHKEY 環境變數！"
+  echo "Error: TAILSCALE_AUTHKEY is not set!"
   exit 1
 fi
 
-echo "正在登入 Tailscale..."
-# 使用 authkey 登入，並設定機器名稱
-/usr/bin/tailscale up --authkey="${TAILSCALE_AUTHKEY}" --hostname="gcp-cloudrun-login-mgr" --accept-routes
+echo "Authenticating Tailscale..."
+/usr/bin/tailscale up --authkey="${TAILSCALE_AUTHKEY}" --hostname="gcp-cloudrun-login" --accept-routes
 
-echo "正在啟動 Spring Boot 應用程式..."
-# 透過 JVM 參數將 TCP 流量導入 Tailscale 的 SOCKS5 代理
-# 並強制讓 Spring Boot 監聽 Cloud Run 指定的 $PORT
+echo "Starting Spring Boot application..."
+# 透過 JVM 參數將連線導向 Tailscale 的 SOCKS5 代理
 exec java \
   -DsocksProxyHost=localhost \
   -DsocksProxyPort=1055 \
