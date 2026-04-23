@@ -33,4 +33,4 @@ build/
 .vscode/
 
 # Ignore local environment profiles
-application-local.properties
+/login-utils-mgr/src/main/resources/application-*.properties
