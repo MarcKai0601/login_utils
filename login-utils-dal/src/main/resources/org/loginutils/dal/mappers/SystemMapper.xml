@@ -6,18 +6,26 @@
         <id column="SystemId" property="systemId" jdbcType="BIGINT"/>
         <result column="SystemCode" property="systemCode" jdbcType="VARCHAR"/>
         <result column="SystemName" property="systemName" jdbcType="VARCHAR"/>
-        <result column="Status" property="status" jdbcType="TINYINT"/>
+        <result column="Domain" property="domain" jdbcType="VARCHAR"/> <result column="Status" property="status" jdbcType="TINYINT"/>
         <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <insert id="insert" parameterType="org.loginutils.dal.model.SystemDo" useGeneratedKeys="true" keyProperty="systemId">
-        INSERT INTO k_system (SystemCode, SystemName, Status, CreateTime, UpdateTime)
-        VALUES (#{systemCode}, #{systemName}, #{status}, #{createTime}, #{updateTime})
+        INSERT INTO k_system (SystemCode, SystemName, Domain, Status, CreateTime, UpdateTime)
+        VALUES (#{systemCode}, #{systemName}, #{domain}, #{status}, #{createTime}, #{updateTime})
     </insert>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         SELECT * FROM k_system WHERE SystemId = #{systemId}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT *
+        FROM k_system
+        WHERE Domain IS NOT NULL
+          AND Domain != ''
+          AND Status = 1
     </select>
 
 </mapper>

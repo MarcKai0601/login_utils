@@ -17,4 +17,6 @@ public class SystemDo {
     private Integer status;
     private Timestamp createTime;
     private Timestamp updateTime;
+    private String domain;
+
 }

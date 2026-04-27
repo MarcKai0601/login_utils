@@ -35,6 +35,7 @@ create table k_user
 -- =============================================
 
 -- 系統表
+-- auto-generated definition
 create table k_system
 (
     SystemId   bigint unsigned auto_increment comment '系統ID'
@@ -44,9 +45,13 @@ create table k_system
     Status     tinyint      not null comment '狀態, 1-啟用, 0-停用',
     CreateTime timestamp    null comment '創建時間',
     UpdateTime timestamp    not null comment '修改時間',
-    constraint uk_system_code unique (SystemCode)
+    Domain     varchar(255) null comment '前端網域 (CORS 白名單，例如 https://your-vercel.app)',
+    constraint uk_system_code
+        unique (SystemCode)
 )
     comment '系統表';
+
+
 
 -- 角色表
 create table k_role
