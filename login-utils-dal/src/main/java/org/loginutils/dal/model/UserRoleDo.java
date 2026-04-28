@@ -19,4 +19,6 @@ public class UserRoleDo {
     private Long userId;
 
     private Long roleId;
+
+    private Long systemId;
 }

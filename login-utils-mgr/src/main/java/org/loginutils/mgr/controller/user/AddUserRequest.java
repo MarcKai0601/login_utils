@@ -39,4 +39,7 @@ public class AddUserRequest {
     private String phone;
     
     private String language;
+
+    @NotNull(message = "系統ID不能為空")
+    private Long systemId;
 }

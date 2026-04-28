@@ -7,4 +7,5 @@ import org.loginutils.dal.model.PermissionDo;
 public interface PermissionMapper {
     int insert(PermissionDo record);
     PermissionDo selectByPrimaryKey(Long permissionId);
+    PermissionDo selectPermissionsByUserIdAndSystemId(Long systemId);
 }

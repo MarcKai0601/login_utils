@@ -37,6 +37,8 @@ public class UserService {
     @Resource
     EmailService emailService;
 
+    private static final Long DEFAULT_GLOBAL_ROLE_ID = 3L;
+
     @Transactional(rollbackFor = Exception.class)
     public void addUser(UserDto userDto) throws MgrException {
 
@@ -46,8 +48,8 @@ public class UserService {
             throw new MgrException(org.loginutils.common.enums.MgrResponseCode.EMAIL_ALREADY_EXISTS);
         }
 
-        String lang = (userDto.getLanguage() != null && !userDto.getLanguage().trim().isEmpty()) 
-                ? userDto.getLanguage() 
+        String lang = (userDto.getLanguage() != null && !userDto.getLanguage().trim().isEmpty())
+                ? userDto.getLanguage()
                 : "zh-TW";
 
         UserDo user = UserDo.builder()
@@ -67,14 +69,21 @@ public class UserService {
 
         log.info("用戶註冊成功 username={}, userId={}", user.getUsername(), user.getUserId());
 
-        // 自動綁定預設角色
+        // 修改點 2：自動綁定預設全域角色，並且必須加上 SystemId
+        // 這裡的 userDto.getSystemId() 需要你從前端 Request 一路傳進來
+        if (userDto.getSystemId() == null) {
+            throw new MgrException(org.loginutils.common.enums.MgrResponseCode.PARAM_INVALID, "SystemId is required for assigning roles");
+        }
+
         UserRoleDo userRole = UserRoleDo.builder()
                 .userId(user.getUserId())
-                .roleId(DEFAULT_ROLE_ID)
+                .systemId(userDto.getSystemId()) // <--- 關鍵！綁定所屬系統
+                .roleId(DEFAULT_GLOBAL_ROLE_ID)  // <--- 使用全域 USER 角色
                 .build();
         userRoleMapper.insertUserRole(userRole);
 
-        log.info("已為 userId={} 綁定預設角色 roleId={}", user.getUserId(), DEFAULT_ROLE_ID);
+        log.info("已為 userId={} 在系統 systemId={} 綁定預設角色 roleId={}",
+                user.getUserId(), userDto.getSystemId(), DEFAULT_GLOBAL_ROLE_ID);
     }
 
     @Transactional(rollbackFor = Exception.class)

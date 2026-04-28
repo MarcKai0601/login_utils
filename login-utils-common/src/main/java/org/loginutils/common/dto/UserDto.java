@@ -54,4 +54,6 @@ public class UserDto {
 
     private Integer isTempPassword; // 是否為臨時密碼(前端依賴此做判斷)
 
+    private Long systemId;
+
 }

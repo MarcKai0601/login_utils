@@ -12,7 +12,6 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class RoleDo {
     private Long roleId;
-    private Long systemId;
     private String roleCode;
     private String roleName;
     private Integer status;

@@ -23,4 +23,15 @@
         SELECT * FROM k_permission WHERE PermissionId = #{permissionId}
     </select>
 
+    <select id="selectPermissionsByUserIdAndSystemId" resultType="org.loginutils.dal.model.PermissionDo">
+        SELECT DISTINCT p.*
+        FROM k_user_role ur
+                 JOIN k_role r ON ur.RoleId = r.RoleId
+                 JOIN k_role_permission rp ON r.RoleId = rp.RoleId
+                 JOIN k_permission p ON rp.PermissionId = p.PermissionId
+        WHERE ur.UserId = #{userId}
+          AND ur.SystemId = #{systemId}  AND p.SystemId = #{systemId}   AND p.Status = 1
+          AND r.Status = 1
+    </select>
+
 </mapper>
